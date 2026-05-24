@@ -1,34 +1,52 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.njt.jbeans.model;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+import jakarta.persistence.Table;
 
 /**
  *
  * @author cid
  */
+@Entity
+@Table(name = "korisnik")
+@Inheritance(strategy = InheritanceType.JOINED) 
 public class Korisnik {
-    private int id;
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Integer id; 
+
+    @Column(name = "email", unique = true, nullable = false)
     private String email;
+
+    @Column(name = "password", nullable = false)
     private String password;
+
+    @Column(name = "username", unique = true, nullable = false)
     private String username;
 
     public Korisnik() {
     }
 
-    public Korisnik(int id, String email, String password, String username) {
+    public Korisnik(Integer id, String email, String password, String username) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.username = username;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -55,5 +73,4 @@ public class Korisnik {
     public void setUsername(String username) {
         this.username = username;
     }
-    
 }

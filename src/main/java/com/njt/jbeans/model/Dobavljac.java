@@ -1,16 +1,26 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.njt.jbeans.model;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 /**
  *
  * @author cid
  */
+@Entity
+@Table(name = "dobavljac")
 public class Dobavljac {
+    
+    @Id
+    @Column(name = "pib") 
     private String pib;
+    
+    @Column(name = "naziv", nullable = false) 
     private String naziv;
+    
+    @Column(name = "broj_telefona")
     private String brojTelefona;
 
     public Dobavljac() {

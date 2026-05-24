@@ -1,15 +1,21 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.njt.jbeans.model;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
 /**
  *
  * @author cid
  */
+@Entity
+@Table(name = "admin") 
 public class Admin extends Korisnik {
+    
+    @Column(name = "sluzbeni_telefon")
     private String sluzbeniTelefon;
+    
+    @Column(name = "is_menadzer")
     private boolean isMenadzer;
 
     public Admin() {
@@ -36,5 +42,4 @@ public class Admin extends Korisnik {
     public void setIsMenadzer(boolean isMenadzer) {
         this.isMenadzer = isMenadzer;
     }
-    
 }

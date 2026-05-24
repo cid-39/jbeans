@@ -1,27 +1,54 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.njt.jbeans.model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import java.util.Date;
 
 /**
  *
  * @author cid
  */
+@Entity
+@Table(name = "dostavljanje")
 public class Dostavljanje {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int id;
+
+    @Column(name = "registracija_vozila", length = 20)
     private String registracijaVozila;
+    
+    @Temporal(TemporalType.TIMESTAMP) 
+    @Column(name = "datum_dostave")
     private Date datumDostave;
+    
+    @Column(name = "status", length = 50)
     private String status;
 
     public Dostavljanje() {
     }
 
-    public Dostavljanje(String registracijaVozila, Date datumDostave, String status) {
+    public Dostavljanje(int id, String registracijaVozila, Date datumDostave, String status) {
+        this.id = id;
         this.registracijaVozila = registracijaVozila;
         this.datumDostave = datumDostave;
         this.status = status;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getRegistracijaVozila() {
@@ -47,5 +74,4 @@ public class Dostavljanje {
     public void setStatus(String status) {
         this.status = status;
     }
-    
 }

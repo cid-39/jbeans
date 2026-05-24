@@ -1,69 +1,66 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.njt.jbeans.model;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 /**
  *
  * @author cid
  */
+@Entity
+@Table(name = "stavka_narudzbine")
 public class StavkaNarudzbine {
-    private int idNarudzbine;
-    private int id;
-    private double cena;
-    private double kolicina;
-    private int idProizvoda;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Integer id;
+
+    @ManyToOne
+    @JoinColumn(name = "narudzbina_id", nullable = false)
+    private Narudzbina narudzbina;
+
+    @ManyToOne
+    @JoinColumn(name = "proizvod_id", nullable = false)
+    private Proizvod proizvod;
+
+    @Column(name = "cena")
+    private Double cena;
+
+    @Column(name = "kolicina")
+    private Double kolicina;
 
     public StavkaNarudzbine() {
     }
 
-    public StavkaNarudzbine(int idNarudzbine, int id, double cena, double kolicina, int idProizvoda) {
-        this.idNarudzbine = idNarudzbine;
+    public StavkaNarudzbine(Integer id, Narudzbina narudzbina, Proizvod proizvod, Double cena, Double kolicina) {
         this.id = id;
+        this.narudzbina = narudzbina;
+        this.proizvod = proizvod;
         this.cena = cena;
         this.kolicina = kolicina;
-        this.idProizvoda = idProizvoda;
     }
 
-    public int getIdNarudzbine() {
-        return idNarudzbine;
-    }
-
-    public void setIdNarudzbine(int idNarudzbine) {
-        this.idNarudzbine = idNarudzbine;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public double getCena() {
-        return cena;
-    }
-
-    public void setCena(double cena) {
-        this.cena = cena;
-    }
-
-    public double getKolicina() {
-        return kolicina;
-    }
-
-    public void setKolicina(double kolicina) {
-        this.kolicina = kolicina;
-    }
-
-    public int getIdProizvoda() {
-        return idProizvoda;
-    }
-
-    public void setIdProizvoda(int idProizvoda) {
-        this.idProizvoda = idProizvoda;
-    }
+    public Integer getId() { return id; }
+    public void setId(Integer id) { this.id = id; }
+    
+    public Narudzbina getNarudzbina() { return narudzbina; }
+    public void setNarudzbina(Narudzbina narudzbina) { this.narudzbina = narudzbina; }
+    
+    public Proizvod getProizvod() { return proizvod; }
+    public void setProizvod(Proizvod proizvod) { this.proizvod = proizvod; }
+    
+    public Double getCena() { return cena; }
+    public void setCena(Double cena) { this.cena = cena; }
+    
+    public Double getKolicina() { return kolicina; }
+    public void setKolicina(Double kolicina) { this.kolicina = kolicina; }
+    
     
 }

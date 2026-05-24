@@ -1,36 +1,42 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.njt.jbeans.service;
 
+import com.njt.jbeans.model.Dobavljac;
+import com.njt.jbeans.repository.DobavljacRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-/**
- *
- * @author cid
- */
 @Service
 public class DobavljacService {
-    public List<Object> getAllDobavljaci() {
-        return new ArrayList<>(); // Vraća praznu listu za sada
+
+    @Autowired
+    private DobavljacRepository dobavljacRepository;
+
+    public List<Dobavljac> getAllDobavljaci() {
+        return dobavljacRepository.findAll();
     }
 
-    public Object getDobavljacById(Long id) {
-        return "Detalji o dobavljaču sa ID: " + id;
+    public Dobavljac getDobavljacById(String pib) {
+        return dobavljacRepository.findById(pib).orElse(null);
     }
 
-    public Object createDobavljac(Object dobavljac) {
-        return "Dobavljač kreiran";
+    public Dobavljac createDobavljac(Dobavljac dobavljac) {
+        return dobavljacRepository.save(dobavljac);
     }
 
-    public Object updateDobavljac(Long id, Object dobavljac) {
-        return "Dobavljač sa ID: " + id + " izmenjen";
+    public Dobavljac updateDobavljac(String pib, Dobavljac dobavljac) {
+        if (dobavljacRepository.existsById(pib)) {
+            return dobavljacRepository.save(dobavljac);
+        }
+        return null;
     }
 
-    public boolean removeDobavljac(Long id) {
-        return true; // Uspešno obrisano
+    public boolean removeDobavljac(String pib) {
+        if (dobavljacRepository.existsById(pib)) {
+            dobavljacRepository.deleteById(pib);
+            return true;
+        }
+        return false;
     }
 }

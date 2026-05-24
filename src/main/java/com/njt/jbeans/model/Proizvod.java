@@ -1,47 +1,64 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.njt.jbeans.model;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 /**
  *
  * @author cid
  */
+@Entity
+@Table(name = "proizvod")
 public class Proizvod {
-    private int id;
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Integer id; 
+
+    @Column(name = "naziv", nullable = false)
     private String naziv;
+
+    @Column(name = "opis")
     private String opis;
-    private double kolicinaPrzena;
-    private int idZrna;
+
+    @Column(name = "kolicina_przena")
+    private Double kolicinaPrzena; 
+
+
+    @ManyToOne
+    @JoinColumn(name = "tip_przenja_id")
     private TipPrzenja tipPrzenja;
+    
+    @ManyToOne
+    @JoinColumn(name = "zrna_id", nullable = false)
     private SirovaZrna zrna;
-
-    public SirovaZrna getZrna() {
-        return zrna;
-    }
-
-    public void setZrna(SirovaZrna zrna) {
-        this.zrna = zrna;
-    }
 
     public Proizvod() {
     }
 
-    public Proizvod(int id, String naziv, String opis, double kolicinaPrzena, int idZrna, TipPrzenja tipPrzenja) {
+    public Proizvod(Integer id, String naziv, String opis, Double kolicinaPrzena, TipPrzenja tipPrzenja, SirovaZrna zrna) {
         this.id = id;
         this.naziv = naziv;
         this.opis = opis;
         this.kolicinaPrzena = kolicinaPrzena;
-        this.idZrna = idZrna;
         this.tipPrzenja = tipPrzenja;
+        this.zrna = zrna;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -61,20 +78,12 @@ public class Proizvod {
         this.opis = opis;
     }
 
-    public double getKolicinaPrzena() {
+    public Double getKolicinaPrzena() {
         return kolicinaPrzena;
     }
 
-    public void setKolicinaPrzena(double kolicinaPrzena) {
+    public void setKolicinaPrzena(Double kolicinaPrzena) {
         this.kolicinaPrzena = kolicinaPrzena;
-    }
-
-    public int getIdZrna() {
-        return idZrna;
-    }
-
-    public void setIdZrna(int idZrna) {
-        this.idZrna = idZrna;
     }
 
     public TipPrzenja getTipPrzenja() {
@@ -84,5 +93,12 @@ public class Proizvod {
     public void setTipPrzenja(TipPrzenja tipPrzenja) {
         this.tipPrzenja = tipPrzenja;
     }
-    
+
+    public SirovaZrna getZrna() {
+        return zrna;
+    }
+
+    public void setZrna(SirovaZrna zrna) {
+        this.zrna = zrna;
+    }
 }

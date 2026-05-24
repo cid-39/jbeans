@@ -1,40 +1,65 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.njt.jbeans.model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import java.util.Date;
 
 /**
  *
  * @author cid
  */
+@Entity
+@Table(name = "narudzbina")
 public class Narudzbina {
-    private int id;
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Integer id; 
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "datum_porucivanja")
     private Date datumPorucivanja;
-    private double ukupnaCena;
-    private int idKlijenta;
-    private int idDostavljanje;
+    
+    @Column(name = "ukupna_cena")
+    private Double ukupnaCena; 
+
+    @ManyToOne
+    @JoinColumn(name = "klijent_id", nullable = false) 
+    private Klijent klijent;
+
+    @ManyToOne
+    @JoinColumn(name = "dostavljanje_id") 
+    private Dostavljanje dostavljanje;
+
+    @Column(name = "pretplata")
     private boolean pretplata;
 
     public Narudzbina() {
     }
 
-    public Narudzbina(int id, Date datumPorucivanja, double ukupnaCena, int idKlijenta, int idDostavljanje, boolean pretplata) {
+    public Narudzbina(Integer id, Date datumPorucivanja, Double ukupnaCena, Klijent klijent, Dostavljanje dostavljanje, boolean pretplata) {
         this.id = id;
         this.datumPorucivanja = datumPorucivanja;
         this.ukupnaCena = ukupnaCena;
-        this.idKlijenta = idKlijenta;
-        this.idDostavljanje = idDostavljanje;
+        this.klijent = klijent;
+        this.dostavljanje = dostavljanje;
         this.pretplata = pretplata;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -46,28 +71,28 @@ public class Narudzbina {
         this.datumPorucivanja = datumPorucivanja;
     }
 
-    public double getUkupnaCena() {
+    public Double getUkupnaCena() {
         return ukupnaCena;
     }
 
-    public void setUkupnaCena(double ukupnaCena) {
+    public void setUkupnaCena(Double ukupnaCena) {
         this.ukupnaCena = ukupnaCena;
     }
 
-    public int getIdKlijenta() {
-        return idKlijenta;
+    public Klijent getKlijent() {
+        return klijent;
     }
 
-    public void setIdKlijenta(int idKlijenta) {
-        this.idKlijenta = idKlijenta;
+    public void setKlijent(Klijent klijent) {
+        this.klijent = klijent;
     }
 
-    public int getIdDostavljanje() {
-        return idDostavljanje;
+    public Dostavljanje getDostavljanje() {
+        return dostavljanje;
     }
 
-    public void setIdDostavljanje(int idDostavljanje) {
-        this.idDostavljanje = idDostavljanje;
+    public void setDostavljanje(Dostavljanje dostavljanje) {
+        this.dostavljanje = dostavljanje;
     }
 
     public boolean isPretplata() {
@@ -77,5 +102,4 @@ public class Narudzbina {
     public void setPretplata(boolean pretplata) {
         this.pretplata = pretplata;
     }
-    
 }

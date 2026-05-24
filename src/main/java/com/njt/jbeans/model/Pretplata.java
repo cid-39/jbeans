@@ -1,58 +1,49 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.njt.jbeans.model;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 
 /**
  *
  * @author cid
  */
+@Entity
+@Table(name = "pretplata")
 public class Pretplata {
-    private int id;
-    private int period;
-    private int idNarudzbine;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Integer id;
+
+    @Column(name = "period")
+    private Integer period;
+
+    @OneToOne
+    @JoinColumn(name = "narudzbina_id", nullable = false, unique = true)
     private Narudzbina narudzbina;
 
     public Pretplata() {
     }
 
-    public Pretplata(int id, int period, int idNarudzbine) {
+    public Pretplata(Integer id, Integer period, Narudzbina narudzbina) {
         this.id = id;
         this.period = period;
-        this.idNarudzbine = idNarudzbine;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getPeriod() {
-        return period;
-    }
-
-    public void setPeriod(int period) {
-        this.period = period;
-    }
-
-    public int getIdNarudzbine() {
-        return idNarudzbine;
-    }
-
-    public void setIdNarudzbine(int idNarudzbine) {
-        this.idNarudzbine = idNarudzbine;
-    }
-
-    public Narudzbina getNarudzbina() {
-        return narudzbina;
-    }
-
-    public void setNarudzbina(Narudzbina narudzbina) {
         this.narudzbina = narudzbina;
     }
-    
+
+    public Integer getId() { return id; }
+    public void setId(Integer id) { this.id = id; }
+
+    public Integer getPeriod() { return period; }
+    public void setPeriod(Integer period) { this.period = period; }
+
+    public Narudzbina getNarudzbina() { return narudzbina; }
+    public void setNarudzbina(Narudzbina narudzbina) { this.narudzbina = narudzbina; }
 }

@@ -1,14 +1,18 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.njt.jbeans.model;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
 /**
  *
  * @author cid
  */
+@Entity
+@Table(name = "klijent")
 public class Klijent extends Korisnik {
+    
+    @Column(name = "adresa")
     private String adresa;
 
     public Klijent() {
@@ -26,5 +30,4 @@ public class Klijent extends Korisnik {
     public void setAdresa(String adresa) {
         this.adresa = adresa;
     }
-    
 }
