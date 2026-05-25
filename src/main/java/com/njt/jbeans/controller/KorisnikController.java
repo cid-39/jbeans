@@ -4,7 +4,9 @@
  */
 package com.njt.jbeans.controller;
 
+import com.njt.jbeans.model.Korisnik;
 import com.njt.jbeans.service.KorisnikService;
+import java.util.Map;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -22,12 +24,30 @@ public class KorisnikController {
     }
 
     @PostMapping("/register")
-    public String register(@RequestBody Object korisnikData) {
-        return korisnikService.registrujKorisnika(korisnikData);
+    public Map<String, String> register(@RequestBody Korisnik korisnik) {
+        try {
+            korisnikService.registrujKorisnika(korisnik);
+            return Map.of(
+                "status", "success",
+                "message", "Korisnik uspešno registrovan"
+            );
+        } catch (Exception e) {
+            return Map.of(
+                "status", "failed",
+                "message", e.getMessage()
+            );
+        }
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody Object loginRequest) {
-        return korisnikService.login(loginRequest);
+    public Map<String, String> login(@RequestBody Object loginRequest) {
+        try {
+            String token = korisnikService.login(loginRequest);
+            return Map.of("token", token);
+        } catch (Exception e) {
+            return Map.of(
+                "message", e.getMessage()
+            );
+        }
     }
 }

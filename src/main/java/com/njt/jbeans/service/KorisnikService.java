@@ -4,9 +4,13 @@
  */
 package com.njt.jbeans.service;
 
+import com.njt.jbeans.model.Korisnik;
+import com.njt.jbeans.repository.AdminRepository;
+import com.njt.jbeans.repository.KorisnikRepository;
 import com.njt.jbeans.security.JwtProvider;
-import java.util.Map;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import java.util.Map;
 
 /**
  *
@@ -14,32 +18,51 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class KorisnikService {
-    private final JwtProvider jwtProvider;
 
-    public KorisnikService(JwtProvider jwtProvider) {
+    private final KorisnikRepository korisnikRepository;
+    private final JwtProvider jwtProvider;
+    private final BCryptPasswordEncoder passwordEncoder;
+    private final AdminRepository adminRepository;
+
+    public KorisnikService(KorisnikRepository korisnikRepository, 
+                           JwtProvider jwtProvider, 
+                           BCryptPasswordEncoder passwordEncoder,
+                           AdminRepository adminRepository) {
+        this.korisnikRepository = korisnikRepository;
         this.jwtProvider = jwtProvider;
+        this.passwordEncoder = passwordEncoder;
+        this.adminRepository = adminRepository;
     }
 
-    public String registrujKorisnika(Object korisnikData) {
-        return "Korisnik uspešno registrovan (MOCK)";
+    public Korisnik registrujKorisnika(Korisnik korisnik) {
+        if (korisnikRepository.existsByEmail(korisnik.getEmail())) {
+            throw new RuntimeException("Korisnik sa ovim email-om već postoji!");
+        }
+        
+        String hesiranaLozinka = passwordEncoder.encode(korisnik.getPassword());
+        korisnik.setPassword(hesiranaLozinka);
+        return korisnikRepository.save(korisnik);
     }
     
-    // bare minimum rad, treba popraviti kad bude radio repo i da se naprave dto...
     public String login(Object loginRequest) {
-        // Privremeno kastujemo u Map da bismo izvukli podatke bez dto klasa
         Map<String, String> podaci = (Map<String, String>) loginRequest;
         String email = podaci.get("email");
         String lozinka = podaci.get("password");
 
-        // Privremena provera
-        if ("cid@example.com".equals(email) && "prolaz123".equals(lozinka)) {
+        Korisnik korisnik = korisnikRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Korisnik sa ovim email-om ne postoji!"));
+
+        // BCrypt provera poklapanja lozinki
+        if (passwordEncoder.matches(lozinka, korisnik.getPassword())) {
+            String uloga = "KORISNIK"; // Podrazumevana uloga        
+            // Proveravamo da li ID ovog korisnika postoji u admin tabeli
+            if (adminRepository.existsById(korisnik.getId())) {
+                uloga = "ADMIN";
+            }
             
-            String praviToken = jwtProvider.generateToken(email, "ADMIN");
-            
-            return "Uspešan login. Token: " + praviToken;
+            return jwtProvider.generateToken(korisnik.getEmail(), uloga);
         } else {
-            // Ako podaci nisu tačni, bacamo grešku
-            throw new RuntimeException("Pogrešan email ili lozinka!");
+            throw new RuntimeException("Pogrešna lozinka!");
         }
     }
 }
