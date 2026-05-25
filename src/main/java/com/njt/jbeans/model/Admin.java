@@ -3,6 +3,8 @@ package com.njt.jbeans.model;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 /**
  *
@@ -10,13 +12,14 @@ import jakarta.persistence.Table;
  */
 @Entity
 @Table(name = "admin") 
+@OnDelete(action = OnDeleteAction.CASCADE)
 public class Admin extends Korisnik {
     
-    @Column(name = "sluzbeni_telefon")
+    @Column(name = "sluzbeni_telefon", nullable = false)
     private String sluzbeniTelefon;
     
-    @Column(name = "is_menadzer")
-    private boolean isMenadzer;
+    @Column(name = "is_menadzer", nullable = false)
+    private boolean isMenadzer = false;
 
     public Admin() {
     }

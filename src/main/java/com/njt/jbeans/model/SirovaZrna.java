@@ -1,5 +1,6 @@
 package com.njt.jbeans.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -25,14 +26,15 @@ public class SirovaZrna {
     @Column(name = "naziv", nullable = false)
     private String naziv;
 
-    @Column(name = "kolicina_na_stanju")
-    private Double kolicinaNaStanju;
+    @Column(name = "kolicina_na_stanju", nullable = false)
+    private Double kolicinaNaStanju = 0.0;
 
-    @Column(name = "cena_po_meri")
+    @Column(name = "cena_po_meri", nullable = false)
     private Double cenaPoMeri;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "pib_dobavljaca", nullable = false)
+    @org.hibernate.annotations.OnDelete(action = org.hibernate.annotations.OnDeleteAction.RESTRICT)
     private Dobavljac dobavljac;
 
     public SirovaZrna() {

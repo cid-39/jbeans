@@ -1,5 +1,6 @@
 package com.njt.jbeans.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -7,10 +8,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
-import java.util.Date;
+import java.util.ArrayList;
+import java.time.LocalDateTime;
+import java.util.List;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 /**
  *
@@ -25,28 +29,32 @@ public class Narudzbina {
     @Column(name = "id")
     private Integer id; 
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "datum_porucivanja")
-    private Date datumPorucivanja;
+    @org.hibernate.annotations.CreationTimestamp
+    @Column(name = "datum_porucivanja", nullable = false, updatable = false)
+    private java.time.LocalDateTime datumPorucivanja;
     
-    @Column(name = "ukupna_cena")
-    private Double ukupnaCena; 
+    @Column(name = "ukupna_cena", nullable = false)
+    private Double ukupnaCena = 0.0; 
 
     @ManyToOne
     @JoinColumn(name = "klijent_id", nullable = false) 
+    @OnDelete(action = OnDeleteAction.RESTRICT)
     private Klijent klijent;
 
     @ManyToOne
     @JoinColumn(name = "dostavljanje_id") 
     private Dostavljanje dostavljanje;
+    
+    @OneToMany(mappedBy = "narudzbina", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<StavkaNarudzbine> stavke = new ArrayList<>();
 
-    @Column(name = "pretplata")
-    private boolean pretplata;
+    @Column(name = "pretplata", nullable = false)
+    private boolean pretplata = false;
 
     public Narudzbina() {
     }
 
-    public Narudzbina(Integer id, Date datumPorucivanja, Double ukupnaCena, Klijent klijent, Dostavljanje dostavljanje, boolean pretplata) {
+    public Narudzbina(Integer id, LocalDateTime datumPorucivanja, Double ukupnaCena, Klijent klijent, Dostavljanje dostavljanje, boolean pretplata) {
         this.id = id;
         this.datumPorucivanja = datumPorucivanja;
         this.ukupnaCena = ukupnaCena;
@@ -63,11 +71,11 @@ public class Narudzbina {
         this.id = id;
     }
 
-    public Date getDatumPorucivanja() {
+    public LocalDateTime getDatumPorucivanja() {
         return datumPorucivanja;
     }
 
-    public void setDatumPorucivanja(Date datumPorucivanja) {
+    public void setDatumPorucivanja(LocalDateTime datumPorucivanja) {
         this.datumPorucivanja = datumPorucivanja;
     }
 
@@ -101,5 +109,18 @@ public class Narudzbina {
 
     public void setPretplata(boolean pretplata) {
         this.pretplata = pretplata;
+    }
+    
+    public List<StavkaNarudzbine> getStavke() {
+        return stavke;
+    }
+
+    public void setStavke(List<StavkaNarudzbine> stavke) {
+        this.stavke = stavke;
+    }
+    
+    public void dodajStavku(StavkaNarudzbine stavka) {
+        this.stavke.add(stavka);
+        stavka.setNarudzbina(this);
     }
 }

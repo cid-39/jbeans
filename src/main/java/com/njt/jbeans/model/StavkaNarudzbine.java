@@ -8,6 +8,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 /**
  *
@@ -28,12 +30,13 @@ public class StavkaNarudzbine {
 
     @ManyToOne
     @JoinColumn(name = "proizvod_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.RESTRICT)
     private Proizvod proizvod;
 
-    @Column(name = "cena")
+    @Column(name = "cena", nullable = false)
     private Double cena;
 
-    @Column(name = "kolicina")
+    @Column(name = "kolicina", nullable = false)
     private Double kolicina;
 
     public StavkaNarudzbine() {

@@ -16,5 +16,5 @@ import org.springframework.stereotype.Repository;
 public interface PretplataRepository extends JpaRepository<Pretplata, Integer> {
 
     Pretplata findByNarudzbina(Narudzbina narudzbina);
-    List<Pretplata> findByKlijent(Klijent klijent);
+    List<Pretplata> findByNarudzbinaKlijent(Klijent klijent);
 }

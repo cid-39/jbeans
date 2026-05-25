@@ -1,5 +1,6 @@
 package com.njt.jbeans.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -19,8 +20,9 @@ public class Vozilo {
     @Column(name = "registracija", length = 20)
     private String registracija;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "tip_vozila_id")
+    @org.hibernate.annotations.OnDelete(action = org.hibernate.annotations.OnDeleteAction.RESTRICT)
     private TipVozila tipVozila;
 
     public Vozilo() {

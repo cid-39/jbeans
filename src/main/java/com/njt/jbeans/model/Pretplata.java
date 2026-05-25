@@ -8,6 +8,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 /**
  *
@@ -27,6 +29,7 @@ public class Pretplata {
 
     @OneToOne
     @JoinColumn(name = "narudzbina_id", nullable = false, unique = true)
+    @OnDelete(action = OnDeleteAction.RESTRICT)
     private Narudzbina narudzbina;
     
     private Boolean aktivna;

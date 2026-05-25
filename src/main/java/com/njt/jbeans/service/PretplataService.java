@@ -37,7 +37,7 @@ public class PretplataService {
         Klijent klijent = new Klijent();
         klijent.setId(korisnik.getId()); 
 
-        return pretplataRepository.findByKlijent(klijent);
+        return pretplataRepository.findByNarudzbinaKlijent(klijent);
     }
 
     public Pretplata createPretplata(Pretplata pretplata) {

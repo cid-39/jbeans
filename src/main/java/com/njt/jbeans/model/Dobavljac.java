@@ -20,7 +20,7 @@ public class Dobavljac {
     @Column(name = "naziv", nullable = false) 
     private String naziv;
     
-    @Column(name = "broj_telefona")
+    @Column(name = "broj_telefona", nullable = false)
     private String brojTelefona;
 
     public Dobavljac() {

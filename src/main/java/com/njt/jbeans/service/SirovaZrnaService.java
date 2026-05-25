@@ -4,7 +4,9 @@
  */
 package com.njt.jbeans.service;
 
+import com.njt.jbeans.model.Dobavljac;
 import com.njt.jbeans.model.SirovaZrna;
+import com.njt.jbeans.repository.DobavljacRepository;
 import com.njt.jbeans.repository.SirovaZrnaRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -16,9 +18,11 @@ import java.util.List;
 @Service
 public class SirovaZrnaService {
     private final SirovaZrnaRepository sirovaZrnaRepository;
+    private final DobavljacRepository dobavljacRepository;
 
-    public SirovaZrnaService(SirovaZrnaRepository sirovaZrnaRepository) {
+    public SirovaZrnaService(SirovaZrnaRepository sirovaZrnaRepository, DobavljacRepository dobavljacRepository) {
         this.sirovaZrnaRepository = sirovaZrnaRepository;
+        this.dobavljacRepository = dobavljacRepository;
     }
 
     public List<SirovaZrna> getAllZrna() {
@@ -31,6 +35,13 @@ public class SirovaZrnaService {
     }
 
     public SirovaZrna createZrna(SirovaZrna zrna) {
+        String pib = zrna.getDobavljac().getPib();
+
+        Dobavljac praviDobavljac = dobavljacRepository.findById(pib)
+                .orElseThrow(() -> new RuntimeException("Dobavljač sa ovim PIB-om ne postoji u bazi!"));
+
+        zrna.setDobavljac(praviDobavljac);
+
         return sirovaZrnaRepository.save(zrna);
     }
 

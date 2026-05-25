@@ -1,5 +1,6 @@
 package com.njt.jbeans.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -30,16 +31,18 @@ public class Proizvod {
     @Column(name = "opis")
     private String opis;
 
-    @Column(name = "kolicina_przena")
-    private Double kolicinaPrzena; 
+    @Column(name = "kolicina_przena", nullable = false)
+    private Double kolicinaPrzena = 0.0; 
 
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "tip_przenja_id")
+    @org.hibernate.annotations.OnDelete(action = org.hibernate.annotations.OnDeleteAction.RESTRICT)
     private TipPrzenja tipPrzenja;
     
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "zrna_id", nullable = false)
+    @org.hibernate.annotations.OnDelete(action = org.hibernate.annotations.OnDeleteAction.RESTRICT)
     private SirovaZrna zrna;
 
     public Proizvod() {
