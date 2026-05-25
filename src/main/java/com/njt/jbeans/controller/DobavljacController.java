@@ -4,6 +4,7 @@
  */
 package com.njt.jbeans.controller;
 
+import com.njt.jbeans.model.Dobavljac;
 import com.njt.jbeans.service.DobavljacService;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -22,28 +23,27 @@ public class DobavljacController {
     }
 
     @GetMapping("/getall")
-    public List<Object> getAll() {
+    public List<Dobavljac> getAll() {
         return dobavljacService.getAllDobavljaci();
     }
 
     @GetMapping("/get")
-    public Object getById(@RequestParam Long id) {
-        //primer: /dobavljac/get?id=3
-        return dobavljacService.getDobavljacById(id);
+    public Dobavljac getById(@RequestParam String pib) {
+        return dobavljacService.getDobavljacById(pib);
     }
 
     @PostMapping("/create")
-    public Object create(@RequestBody Object dobavljac) {
+    public Dobavljac create(@RequestBody Dobavljac dobavljac) {
         return dobavljacService.createDobavljac(dobavljac);
     }
 
     @PostMapping("/update")
-    public Object update(@RequestParam Long id, @RequestBody Object dobavljac) {
-        return dobavljacService.updateDobavljac(id, dobavljac);
+    public Dobavljac update(@RequestParam String pib, @RequestBody Dobavljac dobavljac) {
+        return dobavljacService.updateDobavljac(pib, dobavljac);
     }
 
     @PostMapping("/remove")
-    public boolean remove(@RequestParam Long id) {
-        return dobavljacService.removeDobavljac(id);
+    public boolean remove(@RequestParam String pib) {
+        return dobavljacService.removeDobavljac(pib);
     }
 }

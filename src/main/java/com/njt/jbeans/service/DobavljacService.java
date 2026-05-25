@@ -5,13 +5,15 @@ import com.njt.jbeans.repository.DobavljacRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class DobavljacService {
 
-    @Autowired
-    private DobavljacRepository dobavljacRepository;
+    private final DobavljacRepository dobavljacRepository;
+
+    public DobavljacService(DobavljacRepository dobavljacRepository) {
+        this.dobavljacRepository = dobavljacRepository;
+    }
 
     public List<Dobavljac> getAllDobavljaci() {
         return dobavljacRepository.findAll();
