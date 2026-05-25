@@ -4,8 +4,12 @@
  */
 package com.njt.jbeans.service;
 
+import com.njt.jbeans.model.Klijent;
+import com.njt.jbeans.model.Korisnik;
+import com.njt.jbeans.model.Narudzbina;
+import com.njt.jbeans.repository.KorisnikRepository;
+import com.njt.jbeans.repository.NarudzbinaRepository;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,23 +18,41 @@ import java.util.List;
  */
 @Service
 public class NarudzbinaService {
-    public List<Object> getAllNarudzbine() {
-        return new ArrayList<>();
+    private final KorisnikRepository korisnikRepository;
+    private final NarudzbinaRepository narudzbinaRepository;
+
+    public NarudzbinaService(NarudzbinaRepository narudzbinaRepository, KorisnikRepository korisnikRepository) {
+        this.narudzbinaRepository = narudzbinaRepository;
+        this.korisnikRepository = korisnikRepository;
+    }
+    
+    public List<Narudzbina> getAllNarudzbine() {
+        return narudzbinaRepository.findAll();
     }
 
-    public List<Object> getMojeNarudzbine(Long korisnikId) {
-        return new ArrayList<>();
+    public List<Narudzbina> getMojeNarudzbine(String email) {
+        Korisnik korisnik = korisnikRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Korisnik sa ovim email-om ne postoji!"));
+
+        Klijent klijent = new com.njt.jbeans.model.Klijent();
+        klijent.setId(korisnik.getId()); 
+
+        return narudzbinaRepository.findByKlijent(klijent);
     }
 
-    public Object getNarudzbinaById(Long id) {
-        return "Detalji narudžbine " + id;
+    public Narudzbina getNarudzbinaById(Integer id) {
+        return narudzbinaRepository.findById(id).orElse(null);
     }
 
-    public Object createNarudzbina(Object narudzbina) {
-        return "Narudžbina kreirana";
+    public Narudzbina createNarudzbina(Narudzbina narudzbina) {
+        return narudzbinaRepository.save(narudzbina);
     }
-
-    public Object updateNarudzbina(Long id, Object narudzbina) {
-        return "Narudžbina " + id + " izmenjena (provera datuma prošla)";
+    
+    public Narudzbina updateNarudzbina(Integer id, Narudzbina narudzbina) {
+        if (narudzbinaRepository.existsById(id)) {
+            narudzbina.setId(id); 
+            return narudzbinaRepository.save(narudzbina);
+        }
+        return null;
     }
 }

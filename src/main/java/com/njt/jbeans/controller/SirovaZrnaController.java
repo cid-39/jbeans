@@ -4,6 +4,7 @@
  */
 package com.njt.jbeans.controller;
 
+import com.njt.jbeans.model.SirovaZrna;
 import com.njt.jbeans.service.SirovaZrnaService;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -23,27 +24,27 @@ public class SirovaZrnaController {
     }
 
     @GetMapping("/getall")
-    public List<Object> getAll() {
+    public List<SirovaZrna> getAll() {
         return sirovaZrnaService.getAllZrna();
     }
 
     @GetMapping("/get")
-    public Object getById(@RequestParam Long id) {
+    public SirovaZrna getById(@RequestParam int id) {
         return sirovaZrnaService.getZrnaById(id);
     }
 
     @PostMapping("/create")
-    public Object create(@RequestBody Object zrna) {
+    public SirovaZrna create(@RequestBody SirovaZrna zrna) {
         return sirovaZrnaService.createZrna(zrna);
     }
 
     @PostMapping("/update")
-    public Object update(@RequestParam Long id, @RequestBody Object zrna) {
+    public SirovaZrna update(@RequestParam int id, @RequestBody SirovaZrna zrna) {
         return sirovaZrnaService.updateZrna(id, zrna);
     }
 
     @PostMapping("/remove")
-    public boolean remove(@RequestParam Long id) {
+    public boolean remove(@RequestParam int id) {
         return sirovaZrnaService.removeZrna(id);
     }
 }

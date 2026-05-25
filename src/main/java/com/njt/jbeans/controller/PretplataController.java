@@ -4,9 +4,11 @@
  */
 package com.njt.jbeans.controller;
 
+import com.njt.jbeans.model.Pretplata;
 import com.njt.jbeans.service.PretplataService;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import org.springframework.security.core.Authentication;
 
 /**
  *
@@ -23,27 +25,28 @@ public class PretplataController {
     }
 
     @GetMapping("/getall")
-    public List<Object> getAll() {
+    public List<Pretplata> getAll() {
         return pretplataService.getAllPretplata();
     }
 
     @GetMapping("/moja")
-    public List<Object> getMoja(@RequestParam Long korisnikId) {
-        return pretplataService.getMojePretplate(korisnikId);
+    public List<Pretplata> getMoja(Authentication authentication) {
+        String email = authentication.getName();
+        return pretplataService.getMojePretplate(email);
     }
 
     @PostMapping("/create")
-    public Object create(@RequestBody Object pretplata) {
+    public Pretplata create(@RequestBody Pretplata pretplata) {
         return pretplataService.createPretplata(pretplata);
     }
 
     @PostMapping("/update")
-    public Object update(@RequestParam Long id, @RequestBody Object pretplata) {
+    public Pretplata update(@RequestParam int id, @RequestBody Pretplata pretplata) {
         return pretplataService.updatePretplata(id, pretplata);
     }
 
     @PostMapping("/delete")
-    public Object delete(@RequestParam Long id) {
+    public Pretplata delete(@RequestParam int id) {
         return pretplataService.disablePretplata(id);
     }
 }

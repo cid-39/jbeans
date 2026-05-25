@@ -4,6 +4,7 @@
  */
 package com.njt.jbeans.controller;
 
+import com.njt.jbeans.model.Proizvod;
 import com.njt.jbeans.service.ProizvodService;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -22,22 +23,23 @@ public class ProizvodController {
     }
 
     @GetMapping("/proizvod/getall")
-    public List<Object> getAllPrzenja() {
-        return proizvodService.getAllPrzenja();
+    public List<Proizvod> getAllProizvod() {
+        return proizvodService.getAllProizvod();
     }
 
     @GetMapping("/proizvod/get")
-    public Object getPrzenjeById(@RequestParam Long id) {
-        return proizvodService.getPrzenjeById(id);
+    public Proizvod getPrzenjeById(@RequestParam int id) {
+        return proizvodService.getProizvodById(id);
     }
 
     @PostMapping("/proizvod/update")
-    public Object updateStatus(@RequestParam Long id, @RequestParam String status) {
-        return proizvodService.updateStatusPrzenja(id, status);
+    public Proizvod updateStatus(@RequestParam int id, @RequestParam String status) {
+        return proizvodService.updateStatusProizvod(id, status);
     }
     
     @GetMapping("/dnevni_spisak")
-    public List<Object> getDnevniSpisak() {
+    public List<Proizvod> getDnevniSpisak() {
+        // tek treba uraditi ovo....
         return proizvodService.generisiDnevniSpisakPrzenja();
     }
 }

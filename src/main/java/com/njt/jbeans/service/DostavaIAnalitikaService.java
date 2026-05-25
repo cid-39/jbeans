@@ -4,9 +4,9 @@
  */
 package com.njt.jbeans.service;
 
+import com.njt.jbeans.model.Dostavljanje;
+import com.njt.jbeans.repository.DostavljanjeRepository;
 import org.springframework.stereotype.Service;
-import java.util.Map;
-import java.util.HashMap;
 
 /**
  *
@@ -14,11 +14,20 @@ import java.util.HashMap;
  */
 @Service
 public class DostavaIAnalitikaService {
-    public Object updateIshodDostave(Long id, String ishod) {
-        return "Dostava " + id + " evidentirana sa ishodom: " + ishod;
+    private final DostavljanjeRepository dostavljanjeRepository;
+
+    public DostavaIAnalitikaService(DostavljanjeRepository dostavljanjeRepository) {
+        this.dostavljanjeRepository = dostavljanjeRepository;
     }
 
-    // koji object ce tacno biti povratna vrednosT??
+    public Dostavljanje updateIshodDostave(Integer id, String ishod) {
+        Dostavljanje dostavljanje = dostavljanjeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Dostava sa ID-jem " + id + " ne postoji!"));
+        dostavljanje.setStatus(ishod);
+        
+        return dostavljanjeRepository.save(dostavljanje);
+    }
+
     public Object getGlobalnaAnalitika() {
         return "mockAnalitika";
     }

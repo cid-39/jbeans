@@ -4,8 +4,9 @@
  */
 package com.njt.jbeans.service;
 
+import com.njt.jbeans.model.SirovaZrna;
+import com.njt.jbeans.repository.SirovaZrnaRepository;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,23 +15,38 @@ import java.util.List;
  */
 @Service
 public class SirovaZrnaService {
-    public List<Object> getAllZrna() {
-        return new ArrayList<>();
+    private final SirovaZrnaRepository sirovaZrnaRepository;
+
+    public SirovaZrnaService(SirovaZrnaRepository sirovaZrnaRepository) {
+        this.sirovaZrnaRepository = sirovaZrnaRepository;
     }
 
-    public Object getZrnaById(Long id) {
-        return "Detalji o zrnu sa ID: " + id;
+    public List<SirovaZrna> getAllZrna() {
+        return sirovaZrnaRepository.findAll();
     }
 
-    public Object createZrna(Object zrna) {
-        return "Novo zrno ubačeno u sistem";
+    public SirovaZrna getZrnaById(Integer id) {
+        return sirovaZrnaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Sirova zrna sa ID-jem " + id + " ne postoje!"));
     }
 
-    public Object updateZrna(Long id, Object zrna) {
-        return "Zrno sa ID: " + id + " ažurirano";
+    public SirovaZrna createZrna(SirovaZrna zrna) {
+        return sirovaZrnaRepository.save(zrna);
     }
 
-    public boolean removeZrna(Long id) {
-        return true;
+    public SirovaZrna updateZrna(Integer id, SirovaZrna zrna) {
+        if (sirovaZrnaRepository.existsById(id)) {
+            zrna.setId(id);
+            return sirovaZrnaRepository.save(zrna);
+        }
+        throw new RuntimeException("Ažuriranje nemoguće: Zrno sa ID-jem " + id + " ne postoji!");
+    }
+    
+    public boolean removeZrna(Integer id) {
+        if (sirovaZrnaRepository.existsById(id)) {
+            sirovaZrnaRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 }

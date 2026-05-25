@@ -4,9 +4,11 @@
  */
 package com.njt.jbeans.controller;
 
+import com.njt.jbeans.model.Narudzbina;
 import com.njt.jbeans.service.NarudzbinaService;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import org.springframework.security.core.Authentication;
 
 /**
  *
@@ -23,28 +25,28 @@ public class NarudzbinaController {
     }
 
     @GetMapping("/getall")
-    public List<Object> getAll() {
+    public List<Narudzbina> getAll() {
         return narudzbinaService.getAllNarudzbine();
     }
 
     @GetMapping("/moja")
-    public List<Object> getMoja(@RequestParam Long korisnikId) {
-        // Privremeno prosleđujemo korisnikId dok ne bude bezbednosti/autentifikacije
-        return narudzbinaService.getMojeNarudzbine(korisnikId);
+    public List<Narudzbina> getMoja(Authentication authentication) {
+        String email = authentication.getName();
+        return narudzbinaService.getMojeNarudzbine(email);
     }
 
     @GetMapping("/get")
-    public Object getById(@RequestParam Long id) {
+    public Narudzbina getById(@RequestParam int id) {
         return narudzbinaService.getNarudzbinaById(id);
     }
 
     @PostMapping("/create")
-    public Object create(@RequestBody Object narudzbina) {
+    public Narudzbina create(@RequestBody Narudzbina narudzbina) {
         return narudzbinaService.createNarudzbina(narudzbina);
     }
 
     @PostMapping("/update")
-    public Object update(@RequestParam Long id, @RequestBody Object narudzbina) {
+    public Narudzbina update(@RequestParam int id, @RequestBody Narudzbina narudzbina) {
         return narudzbinaService.updateNarudzbina(id, narudzbina);
     }
 }

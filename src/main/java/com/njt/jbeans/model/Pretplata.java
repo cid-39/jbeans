@@ -28,14 +28,17 @@ public class Pretplata {
     @OneToOne
     @JoinColumn(name = "narudzbina_id", nullable = false, unique = true)
     private Narudzbina narudzbina;
+    
+    private Boolean aktivna;
 
     public Pretplata() {
     }
 
-    public Pretplata(Integer id, Integer period, Narudzbina narudzbina) {
+    public Pretplata(Integer id, Integer period, Narudzbina narudzbina, Boolean aktivna) {
         this.id = id;
         this.period = period;
         this.narudzbina = narudzbina;
+        this.aktivna = aktivna;
     }
 
     public Integer getId() { return id; }
@@ -46,4 +49,12 @@ public class Pretplata {
 
     public Narudzbina getNarudzbina() { return narudzbina; }
     public void setNarudzbina(Narudzbina narudzbina) { this.narudzbina = narudzbina; }
+
+    public Boolean getAktivna() {
+        return aktivna;
+    }
+
+    public void setAktivna(Boolean aktivna) {
+        this.aktivna = aktivna;
+    }
 }

@@ -4,8 +4,12 @@
  */
 package com.njt.jbeans.service;
 
+import com.njt.jbeans.model.Klijent;
+import com.njt.jbeans.model.Korisnik;
+import com.njt.jbeans.model.Pretplata;
+import com.njt.jbeans.repository.KorisnikRepository;
+import com.njt.jbeans.repository.PretplataRepository;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,25 +18,46 @@ import java.util.List;
  */
 @Service
 public class PretplataService {
-    public List<Object> getAllPretplata() {
-        return new ArrayList<>();
+    private final PretplataRepository pretplataRepository;
+    private final KorisnikRepository korisnikRepository;
+
+    public PretplataService(PretplataRepository pretplataRepository, KorisnikRepository korisnikRepository) {
+        this.pretplataRepository = pretplataRepository;
+        this.korisnikRepository = korisnikRepository;
     }
 
-    public List<Object> getMojePretplate(Long korisnikId) {
-        return new ArrayList<>();
+    public List<Pretplata> getAllPretplata() {
+        return pretplataRepository.findAll();
     }
 
-    public Object createPretplata(Object pretplata) {
-        return "Pretplata formirana";
+    public List<Pretplata> getMojePretplate(String email) {
+        Korisnik korisnik = korisnikRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Korisnik sa ovim email-om ne postoji!"));
+
+        Klijent klijent = new Klijent();
+        klijent.setId(korisnik.getId()); 
+
+        return pretplataRepository.findByKlijent(klijent);
     }
 
-    public Object updatePretplata(Long id, Object pretplata) {
-        return "Pretplata izmenjena";
+    public Pretplata createPretplata(Pretplata pretplata) {
+        pretplata.setAktivna(true); 
+        return pretplataRepository.save(pretplata);
     }
 
-    public Object disablePretplata(Long id) {
-        // Ne brišemo iz baze, samo menjamo status zbog analitike
-        return "Pretplata " + id + " je deaktivirana (status: DISABLED)";
+    public Pretplata updatePretplata(Integer id, Pretplata pretplata) {
+        if (pretplataRepository.existsById(id)) {
+            pretplata.setId(id);
+            return pretplataRepository.save(pretplata);
+        }
+        return null;
     }
-    
+
+    public Pretplata disablePretplata(Integer id) {
+        Pretplata pretplata = pretplataRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Pretplata sa ID-jem " + id + " ne postoji!"));
+        
+        pretplata.setAktivna(false); 
+        return pretplataRepository.save(pretplata);
+    }
 }

@@ -4,8 +4,9 @@
  */
 package com.njt.jbeans.service;
 
+import com.njt.jbeans.model.Proizvod;
+import com.njt.jbeans.repository.ProizvodRepository;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,20 +15,31 @@ import java.util.List;
  */
 @Service
 public class ProizvodService {
-    public List<Object> getAllPrzenja() {
-        return new ArrayList<>();
+    private final ProizvodRepository proizvodRepository;
+
+    public ProizvodService(ProizvodRepository proizvodRepository) {
+        this.proizvodRepository = proizvodRepository;
     }
 
-    public Object getPrzenjeById(Long id) {
-        return "Detalji o prženju ID: " + id;
+    public List<Proizvod> getAllProizvod() {
+        return proizvodRepository.findAll();
     }
 
-    public Object updateStatusPrzenja(Long id, String noviStatus) {
-        return "Status prženja " + id + " promenjen u: " + noviStatus;
+    public Proizvod getProizvodById(Integer id) {
+        return proizvodRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Proizvod sa ID-jem " + id + " ne postoji!"));
     }
 
-    public List<Object> generisiDnevniSpisakPrzenja() {
-        // Specijalna logika za dnevni plan prženja
-        return new ArrayList<>();
+    public Proizvod updateStatusProizvod(Integer id, String noviStatus) {
+        Proizvod proizvod = proizvodRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Proizvod sa ID-jem " + id + " ne postoji!"));
+        proizvod.setOpis(noviStatus);
+        return proizvodRepository.save(proizvod);
     }
+    
+    public List<Proizvod> generisiDnevniSpisakPrzenja() {
+        // tek treba uraditi ovo....
+        return proizvodRepository.findAll();
+    }
+    
 }
