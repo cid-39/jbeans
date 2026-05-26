@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
  *
  * @author cid
  */
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping
 public class KorisnikController {
@@ -43,7 +44,7 @@ public class KorisnikController {
     public Map<String, String> login(@RequestBody Object loginRequest) {
         try {
             String token = korisnikService.login(loginRequest);
-            return Map.of("token", token);
+            return Map.of("token", token, "uloga", "KORISNIK"); // DODATI OVDE KOD DA BUDE I ADMIN NEKAD NE SAMO KORISNIK
         } catch (Exception e) {
             return Map.of(
                 "message", e.getMessage()
