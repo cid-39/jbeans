@@ -1,5 +1,7 @@
 package com.njt.jbeans.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,9 +28,10 @@ public class StavkaNarudzbine {
 
     @ManyToOne
     @JoinColumn(name = "narudzbina_id", nullable = false)
+    @JsonIgnore
     private Narudzbina narudzbina;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "proizvod_id", nullable = false)
     @OnDelete(action = OnDeleteAction.RESTRICT)
     private Proizvod proizvod;

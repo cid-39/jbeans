@@ -3,14 +3,13 @@ package com.njt.jbeans.model;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.time.LocalDateTime;
 
 /**
  *
@@ -24,9 +23,10 @@ public class Proizvod {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id; 
-
-    @Column(name = "naziv", nullable = false)
-    private String naziv;
+    
+//    @org.hibernate.annotations.CreationTimestamp
+    @Column(name = "datum_przenja", nullable = false, updatable=false)
+    private LocalDateTime datumPrzenja;
 
     @Column(name = "opis")
     private String opis;
@@ -35,7 +35,7 @@ public class Proizvod {
     private Double kolicinaPrzena = 0.0; 
 
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne
     @JoinColumn(name = "tip_przenja_id")
     @org.hibernate.annotations.OnDelete(action = org.hibernate.annotations.OnDeleteAction.RESTRICT)
     private TipPrzenja tipPrzenja;
@@ -48,15 +48,15 @@ public class Proizvod {
     public Proizvod() {
     }
 
-    public Proizvod(Integer id, String naziv, String opis, Double kolicinaPrzena, TipPrzenja tipPrzenja, SirovaZrna zrna) {
+    public Proizvod(Integer id, LocalDateTime datumPrzenja, String opis, Double kolicinaPrzena, TipPrzenja tipPrzenja, SirovaZrna zrna) {
         this.id = id;
-        this.naziv = naziv;
+        this.datumPrzenja = datumPrzenja;
         this.opis = opis;
         this.kolicinaPrzena = kolicinaPrzena;
         this.tipPrzenja = tipPrzenja;
         this.zrna = zrna;
     }
-
+    
     public Integer getId() {
         return id;
     }
@@ -65,12 +65,12 @@ public class Proizvod {
         this.id = id;
     }
 
-    public String getNaziv() {
-        return naziv;
+    public LocalDateTime getDatumPrzenja() {
+        return datumPrzenja;
     }
 
-    public void setNaziv(String naziv) {
-        this.naziv = naziv;
+    public void setDatumPrzenja(LocalDateTime datumPrzenja) {
+        this.datumPrzenja = datumPrzenja;
     }
 
     public String getOpis() {

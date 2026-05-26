@@ -31,7 +31,7 @@ public class Narudzbina {
 
     @org.hibernate.annotations.CreationTimestamp
     @Column(name = "datum_porucivanja", nullable = false, updatable = false)
-    private java.time.LocalDateTime datumPorucivanja;
+    private LocalDateTime datumPorucivanja;
     
     @Column(name = "ukupna_cena", nullable = false)
     private Double ukupnaCena = 0.0; 
@@ -41,7 +41,7 @@ public class Narudzbina {
     @OnDelete(action = OnDeleteAction.RESTRICT)
     private Klijent klijent;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "dostavljanje_id") 
     private Dostavljanje dostavljanje;
     

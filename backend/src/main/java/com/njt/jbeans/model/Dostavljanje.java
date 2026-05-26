@@ -9,8 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
+import java.time.LocalDateTime;
 import java.util.Date;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -26,16 +25,15 @@ public class Dostavljanje {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
+    private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "registracija_vozila", nullable = false)
+    @JoinColumn(name = "registracija_vozila")
     @OnDelete(action = OnDeleteAction.RESTRICT) 
     private Vozilo vozilo;
     
-    @Temporal(TemporalType.TIMESTAMP) 
-    @Column(name = "datum_dostave")
-    private Date datumDostave;
+    @Column(name = "datum_dostave", nullable = false, updatable = false)
+    private LocalDateTime datumDostave;
     
     @Column(name = "status", length = 50)
     private String status;
@@ -43,26 +41,26 @@ public class Dostavljanje {
     public Dostavljanje() {
     }
 
-    public Dostavljanje(int id, Vozilo vozilo, Date datumDostave, String status) {
+    public Dostavljanje(Integer id, Vozilo vozilo, LocalDateTime datumDostave, String status) {
         this.id = id;
         this.vozilo = vozilo;
         this.datumDostave = datumDostave;
         this.status = status;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public Date getDatumDostave() {
+    public LocalDateTime getDatumDostave() {
         return datumDostave;
     }
 
-    public void setDatumDostave(Date datumDostave) {
+    public void setDatumDostave(LocalDateTime datumDostave) {
         this.datumDostave = datumDostave;
     }
 

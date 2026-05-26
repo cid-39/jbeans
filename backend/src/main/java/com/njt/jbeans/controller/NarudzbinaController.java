@@ -1,15 +1,11 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.njt.jbeans.controller;
 
+import com.njt.jbeans.dto.NarudzbinaRequestDTO;
 import com.njt.jbeans.model.Narudzbina;
 import com.njt.jbeans.service.NarudzbinaService;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import org.springframework.security.core.Authentication;
-
 /**
  *
  * @author cid
@@ -41,8 +37,9 @@ public class NarudzbinaController {
     }
 
     @PostMapping("/create")
-    public Narudzbina create(@RequestBody Narudzbina narudzbina) {
-        return narudzbinaService.createNarudzbina(narudzbina);
+    public Narudzbina create(@RequestBody NarudzbinaRequestDTO dto, Authentication authentication) {
+        String email = authentication.getName();
+        return narudzbinaService.createNarudzbina(dto, email);
     }
 
     @PostMapping("/update")
