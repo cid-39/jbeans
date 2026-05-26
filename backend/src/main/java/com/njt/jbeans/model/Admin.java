@@ -24,7 +24,7 @@ public class Admin extends Korisnik {
     public Admin() {
     }
 
-    public Admin(String sluzbeniTelefon, boolean isMenadzer, int id, String email, String password, String username) {
+    public Admin(String sluzbeniTelefon, boolean isMenadzer, Integer id, String email, String password, String username) {
         super(id, email, password, username);
         this.sluzbeniTelefon = sluzbeniTelefon;
         this.isMenadzer = isMenadzer;

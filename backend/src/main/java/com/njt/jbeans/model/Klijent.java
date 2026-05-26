@@ -21,7 +21,7 @@ public class Klijent extends Korisnik {
     public Klijent() {
     }
 
-    public Klijent(String adresa, int id, String email, String password, String username) {
+    public Klijent(String adresa, Integer id, String email, String password, String username) {
         super(id, email, password, username);
         this.adresa = adresa;
     }

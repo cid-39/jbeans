@@ -21,7 +21,7 @@ public class Korisnik {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id; 
+    private Integer id; 
 
     @Column(name = "email", unique = true, nullable = false)
     private String email;
