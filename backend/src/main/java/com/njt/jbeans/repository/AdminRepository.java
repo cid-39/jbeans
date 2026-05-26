@@ -11,5 +11,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AdminRepository extends JpaRepository<Admin, Integer> {
-        java.util.Optional<Admin> existsById(int id);
+        boolean existsById(int id);
 }
