@@ -39,7 +39,9 @@ public class DobavljacController {
 
     @PostMapping("/update")
     public Dobavljac update(@RequestParam String pib, @RequestBody Dobavljac dobavljac) {
-        return dobavljacService.updateDobavljac(pib, dobavljac);
+        if (pib.equals(dobavljac.getPib()))
+            return dobavljacService.updateDobavljac(pib, dobavljac);
+        else return null;
     }
 
     @PostMapping("/remove")
