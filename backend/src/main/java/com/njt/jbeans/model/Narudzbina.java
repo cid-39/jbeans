@@ -41,7 +41,7 @@ public class Narudzbina {
     @OnDelete(action = OnDeleteAction.RESTRICT)
     private Klijent klijent;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "dostavljanje_id") 
     private Dostavljanje dostavljanje;
     

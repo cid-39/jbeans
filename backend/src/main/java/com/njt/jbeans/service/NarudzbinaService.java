@@ -12,8 +12,10 @@ import com.njt.jbeans.model.Narudzbina;
 import com.njt.jbeans.model.Proizvod;
 import com.njt.jbeans.model.SirovaZrna;
 import com.njt.jbeans.model.StavkaNarudzbine;
+import com.njt.jbeans.repository.DostavljanjeRepository;
 import com.njt.jbeans.repository.KorisnikRepository;
 import com.njt.jbeans.repository.NarudzbinaRepository;
+import com.njt.jbeans.repository.ProizvodRepository;
 import com.njt.jbeans.repository.SirovaZrnaRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -25,16 +27,21 @@ import java.util.List;
  */
 @Service
 public class NarudzbinaService {
+
     private final KorisnikRepository korisnikRepository;
     private final NarudzbinaRepository narudzbinaRepository;
     private final SirovaZrnaRepository sirovaZrnaRepository;
-    
-    public NarudzbinaService(NarudzbinaRepository narudzbinaRepository, KorisnikRepository korisnikRepository, SirovaZrnaRepository sirovaZrnaRepository) {
+    private final DostavljanjeRepository dostavljanjeRepository;
+    private final ProizvodRepository proizvodRepository;
+
+    public NarudzbinaService(NarudzbinaRepository narudzbinaRepository, KorisnikRepository korisnikRepository, SirovaZrnaRepository sirovaZrnaRepository, DostavljanjeRepository dostavljanjeRepository, ProizvodRepository proizvodRepository) {
         this.narudzbinaRepository = narudzbinaRepository;
         this.korisnikRepository = korisnikRepository;
         this.sirovaZrnaRepository = sirovaZrnaRepository;
+        this.dostavljanjeRepository = dostavljanjeRepository;
+        this.proizvodRepository = proizvodRepository;
     }
-    
+
     public List<Narudzbina> getAllNarudzbine() {
         return narudzbinaRepository.findAll();
     }
@@ -44,7 +51,7 @@ public class NarudzbinaService {
                 .orElseThrow(() -> new RuntimeException("Korisnik sa ovim email-om ne postoji!"));
 
         Klijent klijent = new com.njt.jbeans.model.Klijent();
-        klijent.setId(korisnik.getId()); 
+        klijent.setId(korisnik.getId());
 
         return narudzbinaRepository.findByKlijent(klijent);
     }
@@ -52,10 +59,10 @@ public class NarudzbinaService {
     public Narudzbina getNarudzbinaById(Integer id) {
         return narudzbinaRepository.findById(id).orElse(null);
     }
-    
+
     @Transactional
     public Narudzbina createNarudzbina(NarudzbinaRequestDTO dto, String email) {
-        // 1. Pronalazimo korisnika i vezujemo ga za prazan objekat Klijenta
+        // 1. Pronalazimo korisnika i vezujemo ga za Klijenta
         Korisnik korisnik = korisnikRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Korisnik sa ovim email-om ne postoji!"));
 
@@ -67,70 +74,71 @@ public class NarudzbinaService {
         narudzbina.setKlijent(klijent);
         narudzbina.setPretplata(false);
 
-        // 3. Prolazimo kroz stavke iz DTO-a i punimo listu
+        // 3. DOSTAVA: Proveravamo da li vec postoji dostava za taj dan koja čeka
+        Dostavljanje dostavljanje = dostavljanjeRepository
+                .findByDatumDostaveAndStatus(dto.getDatumDostave().toLocalDate(), "CEKA")
+                .orElseGet(() -> {
+                    // Ako ne postoji, pravimo potpuno novu dostavu
+                    Dostavljanje novaDostava = new Dostavljanje();
+                    novaDostava.setDatumDostave(dto.getDatumDostave().toLocalDate());
+                    novaDostava.setStatus("CEKA");
+                    return dostavljanjeRepository.save(novaDostava); 
+                });
+
+        // Vezujemo narudžbinu za nađenu ili novu dostavu
+        narudzbina.setDostavljanje(dostavljanje);
+
+        // 4. Prolazimo kroz stavke iz DTO-a
         double tekucaUkupnaCena = 0.0;
         for (NarudzbinaRequestDTO.StavkaKorpeDTO stavkaDto : dto.getStavke()) {
             SirovaZrna zrno = sirovaZrnaRepository.findById(stavkaDto.getSirovaZrnaId())
                     .orElseThrow(() -> new RuntimeException("Sirovo zrno sa ID " + stavkaDto.getSirovaZrnaId() + " ne postoji!"));
-            
-//            IF postoji 
-                    
-            Proizvod proizvod = new Proizvod();
-            proizvod.setKolicinaPrzena(stavkaDto.getKolicina());
-            proizvod.setTipPrzenja(stavkaDto.getTipPrzenja());
-            proizvod.setZrna(zrno);
-            proizvod.setDatumPrzenja(dto.getDatumDostave());
-            proizvod.setOpis("CEKA PRZENJE");
-            // save prozivod?!
-            
-            
-            
-            // Pravimo novu stavku i vezujemo podatke PROIZVOOOD
+
+            // PROIZVOD: Proveravamo da li se ista kafa sa istim prženjem vec przi tog dana
+            Proizvod proizvod = proizvodRepository
+                    .findByDatumPrzenjaAndZrnaIdAndTipPrzenjaId(dto.getDatumDostave().toLocalDate(), zrno.getId(), stavkaDto.getTipPrzenja().getId())
+                    .map(postojeciProizvod -> {
+                        // Ako postoji, samo dodajemo novu kolicinu na vec postojecu u bazi
+                        postojeciProizvod.setKolicinaPrzena(postojeciProizvod.getKolicinaPrzena() + stavkaDto.getKolicina());
+                        return proizvodRepository.save(postojeciProizvod);
+                    })
+                    .orElseGet(() -> {
+                        // Ako ne postoji, pravimo novi proizvod za przenje
+                        Proizvod noviProizvod = new Proizvod();
+                        noviProizvod.setZrna(zrno);
+                        noviProizvod.setTipPrzenja(stavkaDto.getTipPrzenja());
+                        noviProizvod.setKolicinaPrzena(stavkaDto.getKolicina());
+                        noviProizvod.setDatumPrzenja(dto.getDatumDostave().toLocalDate());
+                        noviProizvod.setOpis("CEKA PRZENJE");
+                        return proizvodRepository.save(noviProizvod);
+                    });
+
+            // 5. Pravimo stavku narudzbine i vezujemo je za (nadjeni ili novi) proizvod
             StavkaNarudzbine stavka = new StavkaNarudzbine();
             stavka.setProizvod(proizvod);
             stavka.setKolicina(stavkaDto.getKolicina());
 
-            // KLJUČNO ZA CASCADE: Dvosmerno povezivanje stavke i narudžbine
-            stavka.setNarudzbina(narudzbina); 
-            narudzbina.getStavke().add(stavka);
+            // Racunamo cenu stavke
+            double cenaStavke = stavkaDto.getKolicina() * zrno.getCenaPoMeri();
+            stavka.setCena(cenaStavke);
+            tekucaUkupnaCena += cenaStavke;
 
-            // Računamo cenu na osnovu cene zrna iz baze
-            stavka.setCena(stavkaDto.getKolicina() * zrno.getCenaPoMeri());
-            tekucaUkupnaCena += stavkaDto.getKolicina() * zrno.getCenaPoMeri();
+            stavka.setNarudzbina(narudzbina);
+            narudzbina.getStavke().add(stavka);
         }
 
-        // 4. Upisujemo konačnu sračunatu cenu u narudžbinu
+        // 6. Upisujemo konacnu cenu i cuvamo narudzbinu
         narudzbina.setUkupnaCena(tekucaUkupnaCena);
-        
-        Dostavljanje dostavljanje = new Dostavljanje(null, null, dto.getDatumDostave(), "CEKA");
-        
-        narudzbina.setDostavljanje(dostavljanje);
-        
-        // 5. Čuvamo samo narudžbinu – Hibernate zbog CascadeType.ALL sam čuva i sve stavke iz liste!
+
         return narudzbinaRepository.save(narudzbina);
     }
-    
-    
-    
+
     // sto je naruzivao narucivao je ovo ce da NEMA
     public Narudzbina updateNarudzbina(Integer id, Narudzbina narudzbina) {
         if (narudzbinaRepository.existsById(id)) {
-            narudzbina.setId(id); 
+            narudzbina.setId(id);
             return narudzbinaRepository.save(narudzbina);
         }
         return null;
     }
 }
-
-
-// pravljenje objekta Narudzbina sa listom stavki
-
-        // POCETAK TRANSAKCIJE
-        
-        // da li vec postoji dostava i proizvod za taj dan?
-        // da> promeni kolicinu u proizvodu
-        // ne > ubaci nove u bazu
-        
-        // ubacivanje narudzbine (uz stavke)
-        
-        // KRAJ TRANSAKCIJE

@@ -9,8 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import java.time.LocalDateTime;
-import java.util.Date;
+import java.time.LocalDate;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -33,7 +32,7 @@ public class Dostavljanje {
     private Vozilo vozilo;
     
     @Column(name = "datum_dostave", nullable = false, updatable = false)
-    private LocalDateTime datumDostave;
+    private LocalDate datumDostave;
     
     @Column(name = "status", length = 50)
     private String status;
@@ -41,7 +40,7 @@ public class Dostavljanje {
     public Dostavljanje() {
     }
 
-    public Dostavljanje(Integer id, Vozilo vozilo, LocalDateTime datumDostave, String status) {
+    public Dostavljanje(Integer id, Vozilo vozilo, LocalDate datumDostave, String status) {
         this.id = id;
         this.vozilo = vozilo;
         this.datumDostave = datumDostave;
@@ -56,11 +55,11 @@ public class Dostavljanje {
         this.id = id;
     }
 
-    public LocalDateTime getDatumDostave() {
+    public LocalDate getDatumDostave() {
         return datumDostave;
     }
 
-    public void setDatumDostave(LocalDateTime datumDostave) {
+    public void setDatumDostave(LocalDate datumDostave) {
         this.datumDostave = datumDostave;
     }
 

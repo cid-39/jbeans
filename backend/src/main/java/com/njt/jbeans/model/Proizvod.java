@@ -9,7 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 /**
  *
@@ -26,7 +26,7 @@ public class Proizvod {
     
 //    @org.hibernate.annotations.CreationTimestamp
     @Column(name = "datum_przenja", nullable = false, updatable=false)
-    private LocalDateTime datumPrzenja;
+    private LocalDate datumPrzenja;
 
     @Column(name = "opis")
     private String opis;
@@ -48,7 +48,7 @@ public class Proizvod {
     public Proizvod() {
     }
 
-    public Proizvod(Integer id, LocalDateTime datumPrzenja, String opis, Double kolicinaPrzena, TipPrzenja tipPrzenja, SirovaZrna zrna) {
+    public Proizvod(Integer id, LocalDate datumPrzenja, String opis, Double kolicinaPrzena, TipPrzenja tipPrzenja, SirovaZrna zrna) {
         this.id = id;
         this.datumPrzenja = datumPrzenja;
         this.opis = opis;
@@ -65,11 +65,11 @@ public class Proizvod {
         this.id = id;
     }
 
-    public LocalDateTime getDatumPrzenja() {
+    public LocalDate getDatumPrzenja() {
         return datumPrzenja;
     }
 
-    public void setDatumPrzenja(LocalDateTime datumPrzenja) {
+    public void setDatumPrzenja(LocalDate datumPrzenja) {
         this.datumPrzenja = datumPrzenja;
     }
 
