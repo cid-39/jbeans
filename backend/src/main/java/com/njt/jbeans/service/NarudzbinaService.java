@@ -13,6 +13,7 @@ import com.njt.jbeans.model.Proizvod;
 import com.njt.jbeans.model.SirovaZrna;
 import com.njt.jbeans.model.StavkaNarudzbine;
 import com.njt.jbeans.repository.DostavljanjeRepository;
+import com.njt.jbeans.repository.KlijentRepository;
 import com.njt.jbeans.repository.KorisnikRepository;
 import com.njt.jbeans.repository.NarudzbinaRepository;
 import com.njt.jbeans.repository.ProizvodRepository;
@@ -33,13 +34,15 @@ public class NarudzbinaService {
     private final SirovaZrnaRepository sirovaZrnaRepository;
     private final DostavljanjeRepository dostavljanjeRepository;
     private final ProizvodRepository proizvodRepository;
+    private final KlijentRepository klijentRepository;
 
-    public NarudzbinaService(NarudzbinaRepository narudzbinaRepository, KorisnikRepository korisnikRepository, SirovaZrnaRepository sirovaZrnaRepository, DostavljanjeRepository dostavljanjeRepository, ProizvodRepository proizvodRepository) {
+    public NarudzbinaService(NarudzbinaRepository narudzbinaRepository, KorisnikRepository korisnikRepository, SirovaZrnaRepository sirovaZrnaRepository, DostavljanjeRepository dostavljanjeRepository, KlijentRepository klijentRepository, ProizvodRepository proizvodRepository) {
         this.narudzbinaRepository = narudzbinaRepository;
         this.korisnikRepository = korisnikRepository;
         this.sirovaZrnaRepository = sirovaZrnaRepository;
         this.dostavljanjeRepository = dostavljanjeRepository;
         this.proizvodRepository = proizvodRepository;
+        this.klijentRepository = klijentRepository;
     }
 
     public List<Narudzbina> getAllNarudzbine() {
@@ -62,12 +65,20 @@ public class NarudzbinaService {
 
     @Transactional
     public Narudzbina createNarudzbina(NarudzbinaRequestDTO dto, String email) {
-        // 1. Pronalazimo korisnika i vezujemo ga za Klijenta
-        Korisnik korisnik = korisnikRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Korisnik sa ovim email-om ne postoji!"));
+        Klijent klijent = klijentRepository.pronadjiPoEmailu(email)
+                .map(postojeciKlijent -> {
+                    // Ako klijent postoji, samo mu ažuriramo adresu u memoriji
+                    postojeciKlijent.setAdresa(dto.getAdresa());
+                    return postojeciKlijent;
+                })
+                .orElseGet(() -> {
+                    Integer korisnikId = korisnikRepository.pronadjiIdPoEmailu(email)
+                            .orElseThrow(() -> new RuntimeException("Korisnik sa ovim email-om ne postoji!"));
 
-        Klijent klijent = new Klijent();
-        klijent.setId(korisnik.getId());
+                    klijentRepository.ubaciKlijenta(korisnikId, dto.getAdresa());
+
+                    return klijentRepository.pronadjiPoEmailu(email).get();
+                });
 
         // 2. Kreiramo glavnu narudžbinu
         Narudzbina narudzbina = new Narudzbina();
@@ -82,7 +93,7 @@ public class NarudzbinaService {
                     Dostavljanje novaDostava = new Dostavljanje();
                     novaDostava.setDatumDostave(dto.getDatumDostave().toLocalDate());
                     novaDostava.setStatus("CEKA");
-                    return dostavljanjeRepository.save(novaDostava); 
+                    return dostavljanjeRepository.save(novaDostava);
                 });
 
         // Vezujemo narudžbinu za nađenu ili novu dostavu

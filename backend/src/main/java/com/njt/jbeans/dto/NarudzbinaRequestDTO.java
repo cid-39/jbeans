@@ -17,6 +17,15 @@ public class NarudzbinaRequestDTO {
     private List<StavkaKorpeDTO> stavke;
     
     private Integer period;
+    private String adresa;
+
+    public String getAdresa() {
+        return adresa;
+    }
+
+    public void setAdresa(String adresa) {
+        this.adresa = adresa;
+    }
 
     public Integer getPeriod() {
         return period;
