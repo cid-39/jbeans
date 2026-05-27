@@ -4,6 +4,7 @@
  */
 package com.njt.jbeans.controller;
 
+import com.njt.jbeans.dto.DnevnoPrzenjeDTO;
 import com.njt.jbeans.model.Proizvod;
 import com.njt.jbeans.service.ProizvodService;
 import org.springframework.web.bind.annotation.*;
@@ -38,8 +39,7 @@ public class ProizvodController {
     }
     
     @GetMapping("/dnevni_spisak")
-    public List<Proizvod> getDnevniSpisak() {
-        // tek treba uraditi ovo....
+    public List<DnevnoPrzenjeDTO> getDnevniSpisak() {
         return proizvodService.generisiDnevniSpisakPrzenja();
     }
 }

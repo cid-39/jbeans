@@ -4,11 +4,13 @@
  */
 package com.njt.jbeans.service;
 
+import com.njt.jbeans.dto.DnevnoPrzenjeDTO;
 import com.njt.jbeans.model.Proizvod;
 import com.njt.jbeans.model.SirovaZrna;
 import com.njt.jbeans.repository.ProizvodRepository;
 import com.njt.jbeans.repository.SirovaZrnaRepository;
 import jakarta.transaction.Transactional;
+import java.time.LocalDate;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -73,9 +75,9 @@ public class ProizvodService {
         return proizvodRepository.save(proizvod);
     }
 
-    public List<Proizvod> generisiDnevniSpisakPrzenja() {
-        // tek treba uraditi ovo....
-        return proizvodRepository.findAll();
+    public List<DnevnoPrzenjeDTO> generisiDnevniSpisakPrzenja() {
+        LocalDate danas = LocalDate.now();
+        return proizvodRepository.pronadjiSveZaPrzenjeNaDan(danas);
     }
 
 }
