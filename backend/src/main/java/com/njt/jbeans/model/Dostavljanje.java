@@ -30,6 +30,14 @@ public class Dostavljanje {
     @JoinColumn(name = "registracija_vozila")
     @OnDelete(action = OnDeleteAction.RESTRICT) 
     private Vozilo vozilo;
+
+    public Vozilo getVozilo() {
+        return vozilo;
+    }
+
+    public void setVozilo(Vozilo vozilo) {
+        this.vozilo = vozilo;
+    }
     
     @Column(name = "datum_dostave", nullable = false, updatable = false)
     private LocalDate datumDostave;

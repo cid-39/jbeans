@@ -7,6 +7,7 @@ package com.njt.jbeans.service;
 import com.njt.jbeans.dto.AnalitikaResponseDTO;
 import com.njt.jbeans.model.Dostavljanje;
 import com.njt.jbeans.model.Narudzbina;
+import com.njt.jbeans.model.Vozilo;
 import com.njt.jbeans.repository.DobavljacRepository;
 import com.njt.jbeans.repository.DostavljanjeRepository;
 import com.njt.jbeans.repository.KlijentRepository;
@@ -41,8 +42,6 @@ public class DostavaIAnalitikaService {
         this.dostavljanjeRepository = dostavljanjeRepository;
         this.pretplataService = pretplataService;
     }
-
-    
 
     @Transactional
     public Dostavljanje updateIshodDostave(Integer id, String ishod) {
@@ -82,5 +81,13 @@ public class DostavaIAnalitikaService {
         dto.setUkupanPrihod(ukupna != null ? ukupna : 0.0);
 
         return dto;
+    }
+
+    public Dostavljanje updateDostavaVozilo(int id, Vozilo vozilo) {
+        Dostavljanje dostavljanje = dostavljanjeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Dostava sa ID-jem " + id + " ne postoji!"));
+
+        dostavljanje.setVozilo(vozilo);
+        return dostavljanjeRepository.save(dostavljanje);
     }
 }
