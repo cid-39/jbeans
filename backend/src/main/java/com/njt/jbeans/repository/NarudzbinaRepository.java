@@ -1,5 +1,6 @@
 package com.njt.jbeans.repository;
 
+import com.njt.jbeans.model.Dostavljanje;
 import com.njt.jbeans.model.Narudzbina;
 import com.njt.jbeans.model.Klijent;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -21,4 +22,6 @@ public interface NarudzbinaRepository extends JpaRepository<Narudzbina, Integer>
     
     // Pronađi sve narudžbine koje imaju ili nemaju aktivnu pretplatu
     List<Narudzbina> findByPretplata(boolean pretplata);
+
+    public List<Narudzbina> findByDostavljanje(Dostavljanje sacuvanoDostavljanje);
 }

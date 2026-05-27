@@ -4,6 +4,7 @@
  */
 package com.njt.jbeans.controller;
 
+import com.njt.jbeans.dto.NarudzbinaRequestDTO;
 import com.njt.jbeans.model.Pretplata;
 import com.njt.jbeans.service.PretplataService;
 import org.springframework.web.bind.annotation.*;
@@ -36,8 +37,9 @@ public class PretplataController {
     }
 
     @PostMapping("/create")
-    public Pretplata create(@RequestBody Pretplata pretplata) {
-        return pretplataService.createPretplata(pretplata);
+    public Pretplata create(@RequestBody NarudzbinaRequestDTO dto, Authentication authentication) {
+        String email = authentication.getName();
+        return pretplataService.createPretplata(dto, email);
     }
 
     @PostMapping("/update")

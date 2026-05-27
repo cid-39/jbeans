@@ -1,5 +1,6 @@
 package com.njt.jbeans.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -23,33 +24,46 @@ import org.hibernate.annotations.OnDeleteAction;
 @Entity
 @Table(name = "narudzbina")
 public class Narudzbina {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer id; 
+    private Integer id;
 
     @org.hibernate.annotations.CreationTimestamp
     @Column(name = "datum_porucivanja", nullable = false, updatable = false)
     private LocalDateTime datumPorucivanja;
-    
+
     @Column(name = "ukupna_cena", nullable = false)
-    private Double ukupnaCena = 0.0; 
+    private Double ukupnaCena = 0.0;
 
     @ManyToOne
-    @JoinColumn(name = "klijent_id", nullable = false) 
+    @JoinColumn(name = "klijent_id", nullable = false)
     @OnDelete(action = OnDeleteAction.RESTRICT)
     private Klijent klijent;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name = "dostavljanje_id") 
+    @JoinColumn(name = "dostavljanje_id")
     private Dostavljanje dostavljanje;
-    
+
     @OneToMany(mappedBy = "narudzbina", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StavkaNarudzbine> stavke = new ArrayList<>();
 
     @Column(name = "pretplata", nullable = false)
     private boolean pretplata = false;
+
+    @ManyToOne
+    @JoinColumn(name = "pretplata_id")
+    @JsonIgnore
+    private Pretplata pretplataObjekat;
+
+    public Pretplata getPretplataObjekat() {
+        return pretplataObjekat;
+    }
+
+    public void setPretplataObjekat(Pretplata pretplataObjekat) {
+        this.pretplataObjekat = pretplataObjekat;
+    }
 
     public Narudzbina() {
     }
@@ -110,7 +124,7 @@ public class Narudzbina {
     public void setPretplata(boolean pretplata) {
         this.pretplata = pretplata;
     }
-    
+
     public List<StavkaNarudzbine> getStavke() {
         return stavke;
     }
@@ -118,7 +132,7 @@ public class Narudzbina {
     public void setStavke(List<StavkaNarudzbine> stavke) {
         this.stavke = stavke;
     }
-    
+
     public void dodajStavku(StavkaNarudzbine stavka) {
         this.stavke.add(stavka);
         stavka.setNarudzbina(this);

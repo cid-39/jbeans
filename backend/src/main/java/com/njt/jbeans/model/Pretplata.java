@@ -1,15 +1,15 @@
 package com.njt.jbeans.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -27,31 +27,50 @@ public class Pretplata {
     @Column(name = "period")
     private Integer period;
 
-    @OneToOne
-    @JoinColumn(name = "narudzbina_id", nullable = false, unique = true)
-    @OnDelete(action = OnDeleteAction.RESTRICT)
-    private Narudzbina narudzbina;
-    
+    @Column(name = "aktivna")
     private Boolean aktivna;
+
+    @OneToMany(mappedBy = "pretplataObjekat", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<Narudzbina> narudzbine = new ArrayList<>();
+
+    public void dodajNarudzbinu(Narudzbina narudzbina) {
+        this.narudzbine.add(narudzbina);
+        narudzbina.setPretplataObjekat(this);
+    }
 
     public Pretplata() {
     }
 
-    public Pretplata(Integer id, Integer period, Narudzbina narudzbina, Boolean aktivna) {
+    public Pretplata(Integer id, Integer period, Boolean aktivna) {
         this.id = id;
         this.period = period;
-        this.narudzbina = narudzbina;
         this.aktivna = aktivna;
     }
+    
 
-    public Integer getId() { return id; }
-    public void setId(Integer id) { this.id = id; }
+    public Integer getId() {
+        return id;
+    }
 
-    public Integer getPeriod() { return period; }
-    public void setPeriod(Integer period) { this.period = period; }
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-    public Narudzbina getNarudzbina() { return narudzbina; }
-    public void setNarudzbina(Narudzbina narudzbina) { this.narudzbina = narudzbina; }
+    public Integer getPeriod() {
+        return period;
+    }
+
+    public List<Narudzbina> getNarudzbine() {
+        return narudzbine;
+    }
+
+    public void setNarudzbine(List<Narudzbina> narudzbine) {
+        this.narudzbine = narudzbine;
+    }
+
+    public void setPeriod(Integer period) {
+        this.period = period;
+    }
 
     public Boolean getAktivna() {
         return aktivna;

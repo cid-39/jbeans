@@ -15,7 +15,17 @@ public class NarudzbinaRequestDTO {
 
     private LocalDateTime datumDostave;
     private List<StavkaKorpeDTO> stavke;
+    
+    private Integer period;
 
+    public Integer getPeriod() {
+        return period;
+    }
+
+    public void setPeriod(Integer period) {
+        this.period = period;
+    }
+    
     // Geteri i seteri
     public LocalDateTime getDatumDostave() { return datumDostave; }
     public void setDatumDostave(LocalDateTime datumDostave) { this.datumDostave = datumDostave; }
