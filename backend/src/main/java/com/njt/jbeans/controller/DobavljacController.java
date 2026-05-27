@@ -13,6 +13,7 @@ import java.util.List;
  *
  * @author cid
  */
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/dobavljac")
 public class DobavljacController {

@@ -1,0 +1,145 @@
+/* src/pages/client/Storefront.css */
+
+.storefront-layout {
+    padding: 40px 0;
+}
+
+.storefront-header {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.storefront-header h1 {
+    color: var(--color-primary);
+    font-size: 32px;
+    margin-bottom: 8px;
+}
+
+/* Responsive catalog grid */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+/* Individual Card Design */
+.product-card {
+    background-color: var(--color-bg-card);
+    border: 1px solid #eadecf;
+    border-radius: var(--radius-md);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 16px rgba(74, 44, 17, 0.1);
+}
+
+.card-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+}
+
+.product-title {
+    color: var(--color-primary);
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* Badge mapping to TipPrzenja */
+.roast-badge {
+    background-color: #f3ebdf;
+    color: var(--color-primary-light);
+    font-size: 12px;
+    font-weight: bold;
+    padding: 4px 8px;
+    border-radius: 20px;
+    text-transform: uppercase;
+}
+
+.product-description {
+    color: var(--color-text-muted);
+    font-size: 14px;
+    margin-bottom: 20px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    height: 66px;
+    /* Consistent height matching text clamp spacing */
+}
+
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+}
+
+.product-price {
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--color-text-main);
+}
+
+.add-to-cart-btn {
+    background-color: var(--color-accent);
+    color: var(--color-primary);
+    font-weight: bold;
+    padding: 8px 16px;
+    border-radius: var(--radius-sm);
+}
+
+.add-to-cart-btn:hover {
+    background-color: var(--color-primary-light);
+    color: white;
+}
+
+
+
+.details-container {
+    background-color: var(--color-bg-card);
+    padding: 40px;
+    border-radius: var(--radius-md);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.details-title {
+    color: var(--color-primary);
+    font-size: 28px;
+}
+
+.roast-selection-box {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: 300px;
+    margin: 15px 0;
+}
+
+.roast-select {
+    padding: 10px;
+    border: 1px solid #eadecf;
+    border-radius: var(--radius-sm);
+    background-color: #fffdf9;
+    font-size: 16px;
+    color: var(--color-text-main);
+}
+
+.back-link {
+    color: var(--color-text-muted);
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 14px;
+}

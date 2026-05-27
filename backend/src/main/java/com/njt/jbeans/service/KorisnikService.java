@@ -66,7 +66,8 @@ public class KorisnikService {
             // Vraćamo kompletne podatke nazad kontroleru
             return Map.of(
                     "token", token,
-                    "uloga", uloga
+                    "uloga", uloga,
+                    "username", korisnik.getUsername()
             );
         } else {
             throw new RuntimeException("Pogrešna lozinka!");

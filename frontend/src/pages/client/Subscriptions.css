@@ -1,0 +1,62 @@
+.subs-layout {
+    padding: 40px 0;
+}
+
+.subs-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: start;
+}
+
+@media (max-width: 768px) {
+    .subs-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.sub-card {
+    background-color: var(--color-bg-card);
+    border: 1px solid #eadecf;
+    border-radius: var(--radius-md);
+    padding: 24px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+}
+
+.sub-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #f3ebdf;
+    padding-bottom: 12px;
+    margin-bottom: 15px;
+}
+
+.sub-interval-badge {
+    background-color: var(--color-primary);
+    color: white;
+    padding: 4px 10px;
+    font-size: 13px;
+    font-weight: bold;
+    border-radius: var(--radius-sm);
+}
+
+.sub-actions-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #f3ebdf;
+}
+
+.sub-btn-cancel {
+    background-color: transparent;
+    border: 1px solid var(--color-danger);
+    color: var(--color-danger);
+}
+
+.sub-btn-cancel:hover {
+    background-color: var(--color-danger);
+    color: white;
+}

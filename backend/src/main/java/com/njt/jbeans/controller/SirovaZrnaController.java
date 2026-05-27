@@ -14,6 +14,7 @@ import java.util.List;
  *
  * @author cid
  */
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/zrna")
 public class SirovaZrnaController {
@@ -26,7 +27,7 @@ public class SirovaZrnaController {
 
     @GetMapping("/getall")
     public List<SirovaZrna> getAll() {
-        return sirovaZrnaService.getAllZrna();
+        return sirovaZrnaService.getAllZrna(); 
     }
 
     @GetMapping("/get")

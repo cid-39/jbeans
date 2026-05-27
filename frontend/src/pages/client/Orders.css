@@ -1,0 +1,65 @@
+/* src/pages/client/Orders.css */
+
+.orders-layout {
+    padding: 40px 0;
+}
+
+.orders-title {
+    color: var(--color-primary);
+    margin-bottom: 24px;
+}
+
+/* Status Badge Universal Design Architecture */
+.status-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.status-badge.primljeno {
+    background-color: #e2f0fd;
+    color: #0275d8;
+}
+
+.status-badge.u_pripremi {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.status-badge.isporuceno {
+    background-color: #d4edda;
+    color: var(--color-success);
+}
+
+/* Drill-Down Details Invoice Layout */
+.invoice-card {
+    background-color: var(--color-bg-card);
+    border-radius: var(--radius-md);
+    border: 1px solid #eadecf;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    padding: 30px;
+    margin-top: 20px;
+}
+
+.invoice-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #f3ebdf;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+.invoice-meta-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    background-color: #fffdf9;
+    padding: 15px;
+    border-radius: var(--radius-sm);
+    border: 1px solid #f3ebdf;
+    margin-bottom: 25px;
+}

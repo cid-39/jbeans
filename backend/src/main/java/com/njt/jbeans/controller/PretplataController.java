@@ -15,6 +15,7 @@ import org.springframework.security.core.Authentication;
  *
  * @author cid
  */
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/pretplata")
 public class PretplataController {

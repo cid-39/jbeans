@@ -1,0 +1,86 @@
+/* src/components/Navbar.css */
+
+.navbar-header {
+    background-color: var(--color-primary);
+    padding: 15px 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.nav-logo {
+    color: var(--color-bg-main);
+    font-size: 22px;
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    list-style: none;
+}
+
+.nav-link {
+    color: #e5d9cc;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color var(--transition-fast);
+}
+
+.nav-link:hover {
+    color: var(--color-accent);
+}
+
+.basket-link-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.basket-badge {
+    position: absolute;
+    top: -10px;
+    right: -12px;
+    background-color: var(--color-accent);
+    color: var(--color-primary);
+    font-size: 11px;
+    font-weight: bold;
+    border-radius: 50%;
+    padding: 2px 6px;
+    min-width: 18px;
+    text-align: center;
+}
+
+.nav-user-info {
+    color: #fffdf9;
+    font-size: 14px;
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 4px 10px;
+    border-radius: var(--radius-sm);
+}
+
+.logout-btn {
+    background-color: transparent;
+    border: 1px solid var(--color-accent);
+    color: var(--color-accent);
+    padding: 6px 12px;
+    font-size: 14px;
+}
+
+.logout-btn:hover {
+    background-color: var(--color-danger);
+    color: white;
+    border-color: var(--color-danger);
+}

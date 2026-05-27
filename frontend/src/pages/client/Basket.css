@@ -1,0 +1,113 @@
+/* src/pages/client/Basket.css */
+
+.basket-layout {
+    padding: 40px 0;
+}
+
+.basket-title {
+    color: var(--color-primary);
+    margin-bottom: 24px;
+}
+
+.basket-table-container {
+    background-color: var(--color-bg-card);
+    border-radius: var(--radius-md);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    padding: 24px;
+    border: 1px solid #eadecf;
+    margin-bottom: 30px;
+    overflow-x: auto;
+}
+
+.basket-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.basket-table th,
+.basket-table td {
+    padding: 16px;
+    border-bottom: 1px solid #f3ebdf;
+}
+
+.basket-table th {
+    color: var(--color-primary-light);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 14px;
+}
+
+.item-roast-info {
+    font-size: 13px;
+    color: var(--color-text-muted);
+    display: block;
+    margin-top: 4px;
+}
+
+.qty-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.qty-btn {
+    background-color: #f3ebdf;
+    color: var(--color-text-main);
+    padding: 4px 10px;
+    font-weight: bold;
+    border-radius: var(--radius-sm);
+}
+
+.qty-btn:hover {
+    background-color: var(--color-accent);
+    color: var(--color-primary);
+}
+
+.remove-btn {
+    background-color: transparent;
+    color: var(--color-danger);
+    text-decoration: underline;
+    padding: 0;
+}
+
+.remove-btn:hover {
+    background-color: transparent;
+    color: #b3242e;
+}
+
+.basket-summary-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--color-primary);
+    color: white;
+    padding: 24px;
+    border-radius: var(--radius-md);
+}
+
+.total-price-label {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.checkout-gateway-btn {
+    background-color: var(--color-accent);
+    color: var(--color-primary);
+    font-size: 16px;
+    font-weight: bold;
+    padding: 12px 28px;
+}
+
+.checkout-gateway-btn:hover {
+    background-color: var(--color-bg-main);
+    color: var(--color-primary);
+}
+
+.empty-basket-msg {
+    text-align: center;
+    padding: 60px 20px;
+    background-color: var(--color-bg-card);
+    border-radius: var(--radius-md);
+    border: 1px solid #eadecf;
+}
