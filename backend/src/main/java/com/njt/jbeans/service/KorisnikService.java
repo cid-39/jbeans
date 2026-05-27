@@ -24,10 +24,10 @@ public class KorisnikService {
     private final BCryptPasswordEncoder passwordEncoder;
     private final AdminRepository adminRepository;
 
-    public KorisnikService(KorisnikRepository korisnikRepository, 
-                           JwtProvider jwtProvider, 
-                           BCryptPasswordEncoder passwordEncoder,
-                           AdminRepository adminRepository) {
+    public KorisnikService(KorisnikRepository korisnikRepository,
+            JwtProvider jwtProvider,
+            BCryptPasswordEncoder passwordEncoder,
+            AdminRepository adminRepository) {
         this.korisnikRepository = korisnikRepository;
         this.jwtProvider = jwtProvider;
         this.passwordEncoder = passwordEncoder;
@@ -38,13 +38,13 @@ public class KorisnikService {
         if (korisnikRepository.existsByEmail(korisnik.getEmail())) {
             throw new RuntimeException("Korisnik sa ovim email-om već postoji!");
         }
-        
+
         String hesiranaLozinka = passwordEncoder.encode(korisnik.getPassword());
         korisnik.setPassword(hesiranaLozinka);
         return korisnikRepository.save(korisnik);
     }
-    
-    public String login(Object loginRequest) {
+
+    public Map<String, String> login(Object loginRequest) {
         Map<String, String> podaci = (Map<String, String>) loginRequest;
         String email = podaci.get("email");
         String lozinka = podaci.get("password");
@@ -54,13 +54,20 @@ public class KorisnikService {
 
         // BCrypt provera poklapanja lozinki
         if (passwordEncoder.matches(lozinka, korisnik.getPassword())) {
-            String uloga = "KORISNIK"; // Podrazumevana uloga        
+            String uloga = "KORISNIK"; // Podrazumevana uloga     
             // Proveravamo da li ID ovog korisnika postoji u admin tabeli
             if (adminRepository.existsById(korisnik.getId())) {
                 uloga = "ADMIN";
             }
-            
-            return jwtProvider.generateToken(korisnik.getEmail(), uloga);
+
+            // Generišemo token sa ispravnom ulogom
+            String token = jwtProvider.generateToken(korisnik.getEmail(), uloga);
+
+            // Vraćamo kompletne podatke nazad kontroleru
+            return Map.of(
+                    "token", token,
+                    "uloga", uloga
+            );
         } else {
             throw new RuntimeException("Pogrešna lozinka!");
         }

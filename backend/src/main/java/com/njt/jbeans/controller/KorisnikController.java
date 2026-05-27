@@ -29,13 +29,13 @@ public class KorisnikController {
         try {
             korisnikService.registrujKorisnika(korisnik);
             return Map.of(
-                "status", "success",
-                "message", "Korisnik uspešno registrovan"
+                    "status", "success",
+                    "message", "Korisnik uspešno registrovan"
             );
         } catch (Exception e) {
             return Map.of(
-                "status", "failed",
-                "message", e.getMessage()
+                    "status", "failed",
+                    "message", e.getMessage()
             );
         }
     }
@@ -43,11 +43,10 @@ public class KorisnikController {
     @PostMapping("/login")
     public Map<String, String> login(@RequestBody Object loginRequest) {
         try {
-            String token = korisnikService.login(loginRequest);
-            return Map.of("token", token, "uloga", "KORISNIK"); // DODATI OVDE KOD DA BUDE I ADMIN NEKAD NE SAMO KORISNIK
+            return korisnikService.login(loginRequest);
         } catch (Exception e) {
             return Map.of(
-                "message", e.getMessage()
+                    "message", e.getMessage()
             );
         }
     }
