@@ -11,6 +11,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Positive;
 import java.util.ArrayList;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -33,7 +34,8 @@ public class Narudzbina {
     @org.hibernate.annotations.CreationTimestamp
     @Column(name = "datum_porucivanja", nullable = false, updatable = false)
     private LocalDateTime datumPorucivanja;
-
+    
+    @Positive(message = "Ukupna cena narudžbine mora biti veća od nule!")
     @Column(name = "ukupna_cena", nullable = false)
     private Double ukupnaCena = 0.0;
 

@@ -9,6 +9,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 
 /**
  *
@@ -26,9 +28,11 @@ public class SirovaZrna {
     @Column(name = "naziv", nullable = false)
     private String naziv;
 
+    @PositiveOrZero(message = "Kolicina na stanju mora biti nula ili veca!")
     @Column(name = "kolicina_na_stanju", nullable = false)
     private Double kolicinaNaStanju = 0.0;
 
+    @Positive(message = "Cena po meri mora biti strogo veca od nule!")
     @Column(name = "cena_po_meri", nullable = false)
     private Double cenaPoMeri;
 

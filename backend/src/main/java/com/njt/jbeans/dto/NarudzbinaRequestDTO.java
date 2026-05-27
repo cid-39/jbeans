@@ -5,6 +5,15 @@
 package com.njt.jbeans.dto;
 
 import com.njt.jbeans.model.TipPrzenja;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 /**
@@ -13,10 +22,17 @@ import java.util.List;
  */
 public class NarudzbinaRequestDTO {
 
+    @NotNull(message = "Datum dostave je obavezan!")
+    @Future(message = "Datum dostave mora biti isključivo u buducnosti (od sutra pa nadalje)!")
     private LocalDateTime datumDostave;
+    
+    @Valid //
+    @NotEmpty(message = "Korpa ne sme biti prazna!")
     private List<StavkaKorpeDTO> stavke;
     
     private Integer period;
+    
+    @NotBlank(message = "Adresa ne sme biti prazna!")
     private String adresa;
 
     public String getAdresa() {
@@ -44,8 +60,14 @@ public class NarudzbinaRequestDTO {
 
     // Unutrašnja pomoćna klasa za uparene parove (id_zrna, kolicina)
     public static class StavkaKorpeDTO {
+        @NotNull(message = "ID sirovog zrna je obavezan!")
         private Integer sirovaZrnaId;
+        
+        @NotNull(message = "Kolicina je obavezna!")
+        @DecimalMin(value = "0.2", inclusive = true, message = "Kolicina mora biti najmanje 0.2 kg!")
         private Double kolicina;
+        
+        @NotNull(message = "Tip przenja je obavezan!")
         private TipPrzenja tipPrzenja;
 
         public TipPrzenja getTipPrzenja() {

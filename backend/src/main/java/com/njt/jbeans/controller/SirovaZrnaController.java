@@ -6,6 +6,7 @@ package com.njt.jbeans.controller;
 
 import com.njt.jbeans.model.SirovaZrna;
 import com.njt.jbeans.service.SirovaZrnaService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class SirovaZrnaController {
     }
 
     @PostMapping("/create")
-    public SirovaZrna create(@RequestBody SirovaZrna zrna) {
+    public SirovaZrna create(@Valid @RequestBody SirovaZrna zrna) {
         return sirovaZrnaService.createZrna(zrna);
     }
 

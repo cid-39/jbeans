@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Positive;
 import java.time.LocalDate;
 
 /**
@@ -24,13 +25,13 @@ public class Proizvod {
     @Column(name = "id")
     private Integer id; 
     
-//    @org.hibernate.annotations.CreationTimestamp
     @Column(name = "datum_przenja", nullable = false, updatable=false)
     private LocalDate datumPrzenja;
 
     @Column(name = "opis")
     private String opis;
 
+    @Positive(message = "Kolicina przena mora strogo veca od nule!")
     @Column(name = "kolicina_przena", nullable = false)
     private Double kolicinaPrzena = 0.0; 
 

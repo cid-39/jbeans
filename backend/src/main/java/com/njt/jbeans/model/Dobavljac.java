@@ -4,6 +4,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 /**
  *
@@ -14,12 +16,15 @@ import jakarta.persistence.Table;
 public class Dobavljac {
     
     @Id
-    @Column(name = "pib") 
+    @Size(min = 9, max = 9, message= "PIB mora imati tacno 9 cifara!")
+    @Pattern(regexp = "^[0-9]+$", message = "PIB sme sadrzati samo brojeve!")
+    @Column(name = "pib", length = 9) 
     private String pib;
     
     @Column(name = "naziv", nullable = false) 
     private String naziv;
     
+    @Pattern(regexp = "^[0-9]+$", message = "Telefon sme sadrzati samo brojeve!")
     @Column(name = "broj_telefona", nullable = false)
     private String brojTelefona;
 

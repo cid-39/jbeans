@@ -1,5 +1,6 @@
 package com.njt.jbeans.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,6 +9,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 
 /**
  *
@@ -23,6 +26,8 @@ public class Korisnik {
     @Column(name = "id")
     private Integer id; 
 
+    @NotBlank(message = "Email ne sme biti prazan!")
+    @Email(message = "Email adresa mora sadrzati @ i biti u ispravnom formatu!")
     @Column(name = "email", unique = true, nullable = false)
     private String email;
 

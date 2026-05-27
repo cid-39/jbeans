@@ -6,6 +6,7 @@ package com.njt.jbeans.controller;
 
 import com.njt.jbeans.model.Korisnik;
 import com.njt.jbeans.service.KorisnikService;
+import jakarta.validation.Valid;
 import java.util.Map;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +26,7 @@ public class KorisnikController {
     }
 
     @PostMapping("/register")
-    public Map<String, String> register(@RequestBody Korisnik korisnik) {
+    public Map<String, String> register(@Valid @RequestBody Korisnik korisnik) {
         try {
             korisnikService.registrujKorisnika(korisnik);
             return Map.of(

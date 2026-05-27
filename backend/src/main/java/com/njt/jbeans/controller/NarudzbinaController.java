@@ -3,6 +3,7 @@ package com.njt.jbeans.controller;
 import com.njt.jbeans.dto.NarudzbinaRequestDTO;
 import com.njt.jbeans.model.Narudzbina;
 import com.njt.jbeans.service.NarudzbinaService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import org.springframework.security.core.Authentication;
@@ -37,7 +38,7 @@ public class NarudzbinaController {
     }
 
     @PostMapping("/create")
-    public Narudzbina create(@RequestBody NarudzbinaRequestDTO dto, Authentication authentication) {
+    public Narudzbina create(@Valid @RequestBody NarudzbinaRequestDTO dto, Authentication authentication) {
         String email = authentication.getName();
         return narudzbinaService.createNarudzbina(dto, email);
     }

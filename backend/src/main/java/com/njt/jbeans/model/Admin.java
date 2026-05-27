@@ -3,6 +3,7 @@ package com.njt.jbeans.model;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Pattern;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -15,6 +16,7 @@ import org.hibernate.annotations.OnDeleteAction;
 @OnDelete(action = OnDeleteAction.CASCADE)
 public class Admin extends Korisnik {
     
+    @Pattern(regexp = "^[0-9]+$", message = "Telefon sme sadrzati samo brojeve!")
     @Column(name = "sluzbeni_telefon", nullable = false)
     private String sluzbeniTelefon;
     

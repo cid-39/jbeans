@@ -19,6 +19,8 @@ import com.njt.jbeans.repository.NarudzbinaRepository;
 import com.njt.jbeans.repository.ProizvodRepository;
 import com.njt.jbeans.repository.SirovaZrnaRepository;
 import jakarta.transaction.Transactional;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -65,6 +67,12 @@ public class NarudzbinaService {
 
     @Transactional
     public Narudzbina createNarudzbina(NarudzbinaRequestDTO dto, String email) {
+        LocalDateTime pocetakSutrasnjegDana = LocalDate.now().plusDays(1).atStartOfDay();
+        
+        if (dto.getDatumDostave().isBefore(pocetakSutrasnjegDana)) {
+            throw new RuntimeException("Dostava ne može biti realizovana danas! Izaberite sutrašnji ili neki naredni dan.");
+        }
+        
         Klijent klijent = klijentRepository.pronadjiPoEmailu(email)
                 .map(postojeciKlijent -> {
                     // Ako klijent postoji, samo mu ažuriramo adresu u memoriji

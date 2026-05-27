@@ -7,6 +7,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 /**
  *
@@ -17,7 +19,12 @@ import jakarta.persistence.Table;
 public class Vozilo {
     
     @Id
-    @Column(name = "registracija", length = 20)
+    @Size(min = 9, max = 10, message= "Registracija mora imati izmedju 9 i 10 karaktera!")
+//    @Pattern(
+//        regexp = "^[A-ZŠĐČĆŽWXY]{2}-[0-9]{3,4}-[A-ZŠĐČĆŽWXY]{2}$", 
+//        message = "Registracija mora biti u ispravnom formatu sa crticama i velikim slovima (npr. BG-045-AB)!"
+//    )
+    @Column(name = "registracija", length = 10)
     private String registracija;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})

@@ -6,6 +6,7 @@ package com.njt.jbeans.controller;
 
 import com.njt.jbeans.model.Dobavljac;
 import com.njt.jbeans.service.DobavljacService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 /**
@@ -33,7 +34,7 @@ public class DobavljacController {
     }
 
     @PostMapping("/create")
-    public Dobavljac create(@RequestBody Dobavljac dobavljac) {
+    public Dobavljac create(@Valid @RequestBody Dobavljac dobavljac) {
         return dobavljacService.createDobavljac(dobavljac);
     }
 
