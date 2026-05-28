@@ -6,6 +6,7 @@ package com.njt.jbeans.service;
 
 import com.njt.jbeans.dto.AnalitikaResponseDTO;
 import com.njt.jbeans.model.Dostavljanje;
+import com.njt.jbeans.model.Klijent;
 import com.njt.jbeans.model.Narudzbina;
 import com.njt.jbeans.model.Vozilo;
 import com.njt.jbeans.repository.DobavljacRepository;
@@ -44,24 +45,33 @@ public class DostavaIAnalitikaService {
     }
 
     @Transactional
-    public Dostavljanje updateIshodDostave(Integer id, String ishod) {
-        Dostavljanje dostavljanje = dostavljanjeRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Dostava sa ID-jem " + id + " ne postoji!"));
+public Dostavljanje updateIshodDostave(Integer id, String ishod) {
+    Dostavljanje dostavljanje = dostavljanjeRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Dostava sa ID-jem " + id + " ne postoji!"));
 
-        dostavljanje.setStatus(ishod);
-        Dostavljanje sacuvanoDostavljanje = dostavljanjeRepository.save(dostavljanje);
+    dostavljanje.setStatus(ishod);
+    Dostavljanje sacuvanoDostavljanje = dostavljanjeRepository.save(dostavljanje);
 
-        if ("ISPORUCENO".equalsIgnoreCase(ishod)) {
+    if ("ISPORUCENO".equalsIgnoreCase(ishod)) {
+        List<Narudzbina> narudzbineNaOvojDostavi = narudzbinaRepository.findByDostavljanje(sacuvanoDostavljanje);
 
-            List<Narudzbina> narudzbineNaOvojDostavi = narudzbinaRepository.findByDostavljanje(sacuvanoDostavljanje);
-
-            for (Narudzbina narudzbina : narudzbineNaOvojDostavi) {
-                pretplataService.proveriIKreirajSledeciKrug(narudzbina);
+        for (Narudzbina narudzbina : narudzbineNaOvojDostavi) {
+            // SPASILAC: Otvaramo klijenta iz narudžbine i osiguravamo da mu adresa nije null u memoriji
+            if (narudzbina.getKlijent() != null) {
+                // Čitamo klijenta preko našeg JPQL upita koji smo ranije napravili, a koji garantovano puni adresu
+                Klijent svezKlijent = klijentRepository.pronadjiPoEmailu(narudzbina.getKlijent().getEmail())
+                        .orElseThrow(() -> new RuntimeException("Klijent ne postoji u bazi!"));
+                
+                // Ponovo ga vezujemo za narudžbinu da pregazimo "felerični" objekat iz keša
+                narudzbina.setKlijent(svezKlijent);
             }
-        }
 
-        return sacuvanoDostavljanje;
+            pretplataService.proveriIKreirajSledeciKrug(narudzbina);
+        }
     }
+
+    return sacuvanoDostavljanje;
+}
 
     @Transactional
     public AnalitikaResponseDTO getGlobalnaAnalitika() {
@@ -89,5 +99,9 @@ public class DostavaIAnalitikaService {
 
         dostavljanje.setVozilo(vozilo);
         return dostavljanjeRepository.save(dostavljanje);
+    }
+
+    public List<Dostavljanje> getAllDostavljanje() {
+        return dostavljanjeRepository.findAll();
     }
 }

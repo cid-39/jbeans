@@ -23,10 +23,11 @@ export const Navbar: React.FC = () => {
                     {/* 1. ADMIN NAVIGATION */}
                     {isAuthenticated && isAdmin && (
                         <>
-                            <li className="nav-link" onClick={() => handleNavigation('/admin')}>Dashboard</li>
-                            <li className="nav-link" onClick={() => handleNavigation('/admin/plan')}>Dnevni Spisak</li>
                             <li className="nav-link" onClick={() => handleNavigation('/admin/magacin')}>Magacin & Dobavljači</li>
                             <li className="nav-link" onClick={() => handleNavigation('/admin/katalog')}>Katalog Proizvoda</li>
+                            <li className="nav-link" onClick={() => handleNavigation('/admin/porudzbine')}>Narudžbine & Pretplate</li>
+                            <li className="nav-link" onClick={() => handleNavigation('/admin/dostave')}>Dostave</li>
+                            <li className="nav-link" onClick={() => handleNavigation('/admin/analitika')}>Analitika</li>
                         </>
                     )}
 

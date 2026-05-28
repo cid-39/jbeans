@@ -7,6 +7,7 @@ package com.njt.jbeans.controller;
 import com.njt.jbeans.model.Dostavljanje;
 import com.njt.jbeans.model.Vozilo;
 import com.njt.jbeans.service.DostavaIAnalitikaService;
+import java.util.List;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -31,6 +32,11 @@ public class DostavaIAnalitikaController {
     @PostMapping("/dostava/vozilo")
     public Dostavljanje updateDostavaVozilo(@RequestParam int id, @RequestBody Vozilo vozilo) {
         return dostavaIAnalitikaService.updateDostavaVozilo(id, vozilo);
+    }
+    
+    @GetMapping("/dostava/getall")
+    public List<Dostavljanje> getDostavljanja(){
+        return dostavaIAnalitikaService.getAllDostavljanje();
     }
 
     @GetMapping("/analitika")

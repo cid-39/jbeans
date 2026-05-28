@@ -18,6 +18,14 @@ import { OrderDetails } from './pages/client/OrderDetails';
 import { CreateSubscription } from './pages/client/CreateSubscription';
 import { MySubscriptions } from './pages/client/MySubscriptions';
 
+// Admin  pages
+import { AdminWarehouse } from './pages/admin/AdminWarehouse';
+import { AdminCatalog } from './pages/admin/AdminCatalog';
+import { AdminPlan } from './pages/admin/AdminPlan';
+import { AdminOrders } from './pages/admin/AdminOrders';
+import { AdminDeliveries } from './pages/admin/AdminDeliveries';
+import { AdminAnalytics } from './pages/admin/AdminAnalytics';
+
 export const App: React.FC = () => {
   const currentPath = window.location.pathname;
 
@@ -65,6 +73,47 @@ export const App: React.FC = () => {
             <CreateSubscription />
           </ProtectedRoute>
         );
+
+      /* --- Admin Routes --- */
+      case '/admin/magacin':
+        return (
+          <ProtectedRoute>
+            <AdminWarehouse />
+          </ProtectedRoute>
+        );
+      case '/admin/katalog':
+        return (
+          <ProtectedRoute>
+            <AdminCatalog />
+          </ProtectedRoute>
+        );
+      case '/admin/plan':
+        return (
+          <ProtectedRoute >
+            <AdminPlan />
+          </ProtectedRoute>
+        );
+      case '/admin/porudzbine':
+        return (
+          <ProtectedRoute>
+            <AdminOrders />
+          </ProtectedRoute>
+        );
+      case '/admin/dostave':
+        return (
+          <ProtectedRoute>
+            <AdminDeliveries />
+          </ProtectedRoute>
+        );
+      case '/admin/analitika':
+        return (
+          <ProtectedRoute>
+            <AdminAnalytics />
+          </ProtectedRoute>
+        );
+
+      // ... dodaj ostale admin rute
+
 
       /* --- Dynamic Match Fallbacks --- */
       default:
