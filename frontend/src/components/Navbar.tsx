@@ -15,8 +15,13 @@ export const Navbar: React.FC = () => {
         <nav className="navbar-header">
             <div className="navbar-container">
                 {/* Clickable Brand Title */}
-                <div className="nav-logo" onClick={() => handleNavigation(isAdmin ? '/admin' : '/')}>
-                    ☕ JBeans Roastery
+                <div className="nav-logo">
+                    <img
+                        src="/jbeans_zrna.png"
+                        alt="JBeans Logo"
+                        className="nav-logo-image"
+                        style={{ height: '80px', width: 'auto' }}
+                    />
                 </div>
 
                 <ul className="nav-links">
