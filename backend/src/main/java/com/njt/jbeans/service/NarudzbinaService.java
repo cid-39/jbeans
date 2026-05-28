@@ -68,15 +68,17 @@ public class NarudzbinaService {
     @Transactional
     public Narudzbina createNarudzbina(NarudzbinaRequestDTO dto, String email) {
         LocalDateTime pocetakSutrasnjegDana = LocalDate.now().plusDays(1).atStartOfDay();
-        
+
         if (dto.getDatumDostave().isBefore(pocetakSutrasnjegDana)) {
             throw new RuntimeException("Dostava ne može biti realizovana danas! Izaberite sutrašnji ili neki naredni dan.");
         }
-        
+
         Klijent klijent = klijentRepository.pronadjiPoEmailu(email)
                 .map(postojeciKlijent -> {
                     // Ako klijent postoji, samo mu ažuriramo adresu u memoriji
-                    postojeciKlijent.setAdresa(dto.getAdresa());
+                    if (dto.getAdresa() != null && !dto.getAdresa().isBlank()) {
+                        postojeciKlijent.setAdresa(dto.getAdresa());
+                    }
                     return postojeciKlijent;
                 })
                 .orElseGet(() -> {

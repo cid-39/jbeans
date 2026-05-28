@@ -4,7 +4,7 @@ import { magacinService, Dobavljac, SirovaZrna } from '../../api/magacinService'
 export const AdminWarehouse: React.FC = () => {
     const [dobavljaci, setDobavljaci] = useState<Dobavljac[]>([]);
     const [zrna, setZrna] = useState<SirovaZrna[]>([]);
-    
+
     // State za modale
     const [showDobModal, setShowDobModal] = useState(false);
     const [showZrnoModal, setShowZrnoModal] = useState(false);
@@ -46,13 +46,26 @@ export const AdminWarehouse: React.FC = () => {
                 <input type="text" placeholder="Naziv zrna" defaultValue={editData?.naziv} id="z-naziv" style={{ width: '100%', padding: '10px', marginBottom: '15px', borderRadius: '4px', border: '1px solid #ccc', boxSizing: 'border-box' }} />
                 <input type="number" placeholder="Količina" defaultValue={editData?.kolicinaNaStanju} id="z-kol" style={{ width: '100%', padding: '10px', marginBottom: '15px', borderRadius: '4px', border: '1px solid #ccc', boxSizing: 'border-box' }} />
                 <input type="number" placeholder="Cena" defaultValue={editData?.cenaPoMeri} id="z-cena" style={{ width: '100%', padding: '10px', marginBottom: '15px', borderRadius: '4px', border: '1px solid #ccc', boxSizing: 'border-box' }} />
-                <select defaultValue={editData?.dobavljac.pib} id="z-pib" style={{ width: '100%', padding: '10px', marginBottom: '20px', borderRadius: '4px', border: '1px solid #ccc', boxSizing: 'border-box' }}>
+                <select defaultValue={editData?.dobavljac?.pib} id="z-pib" style={{ width: '100%', padding: '10px', marginBottom: '20px', borderRadius: '4px', border: '1px solid #ccc', boxSizing: 'border-box' }}>
                     {dobavljaci.map(d => <option key={d.pib} value={d.pib}>{d.naziv}</option>)}
                 </select>
                 <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
                     <button style={{ padding: '8px 15px', background: '#ccc', border: 'none', borderRadius: '4px', cursor: 'pointer' }} onClick={() => setShowZrnoModal(false)}>Otkaži</button>
                     <button style={{ padding: '8px 15px', background: '#007bff', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer' }} onClick={async () => {
-                        const data = { naziv: (document.getElementById('z-naziv') as HTMLInputElement).value, kolicinaNaStanju: Number((document.getElementById('z-kol') as HTMLInputElement).value), cenaPoMeri: Number((document.getElementById('z-cena') as HTMLInputElement).value), dobavljac: { pib: (document.getElementById('z-pib') as HTMLInputElement).value } };
+                        const odabraniPib = (document.getElementById('z-pib') as HTMLInputElement).value;
+                        const odabraniDobavljac = dobavljaci.find(d => d.pib === odabraniPib);
+
+                        const data = {
+                            naziv: (document.getElementById('z-naziv') as HTMLInputElement).value,
+                            kolicinaNaStanju: Number((document.getElementById('z-kol') as HTMLInputElement).value),
+                            cenaPoMeri: Number((document.getElementById('z-cena') as HTMLInputElement).value),
+                            dobavljac: {
+                                pib: odabraniPib,
+                                naziv: odabraniDobavljac ? odabraniDobavljac.naziv : '',
+                                brojTelefona: odabraniDobavljac ? odabraniDobavljac.brojTelefona : ''
+                            }
+                        };
+
                         editData ? await magacinService.updateZrno(editData.id, data) : await magacinService.createZrno(data);
                         setShowZrnoModal(false); loadData();
                     }}>Sačuvaj</button>
@@ -64,13 +77,13 @@ export const AdminWarehouse: React.FC = () => {
     return (
         <div className="container" style={{ padding: '20px' }}>
             <h1 style={{ marginBottom: '30px', color: '#333' }}>Upravljanje Magacinom</h1>
-            
+
             <div style={{ display: 'flex', gap: '40px' }}>
                 {/* SEKCIJA DOBAVLJAČI */}
                 <section style={{ flex: 1, border: '1px solid #ddd', borderRadius: '8px', padding: '20px', background: '#fafafa' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
                         <h2 style={{ margin: 0, fontSize: '20px', color: '#444' }}>Dobavljači</h2>
-                        <button 
+                        <button
                             style={{ padding: '8px 16px', background: '#007bff', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}
                             onClick={() => { setEditData(null); setShowDobModal(true); }}
                         >
@@ -89,13 +102,13 @@ export const AdminWarehouse: React.FC = () => {
                                 <tr key={d.pib} style={{ borderBottom: '1px solid #eee' }}>
                                     <td style={{ padding: '12px 10px', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>{d.naziv}</td>
                                     <td style={{ padding: '12px 10px' }}>
-                                        <button 
+                                        <button
                                             style={{ marginRight: '8px', padding: '5px 10px', background: '#ffc107', border: 'none', borderRadius: '4px', cursor: 'pointer', color: '#000' }}
                                             onClick={() => { setEditData(d); setShowDobModal(true); }}
                                         >
                                             Izmeni
                                         </button>
-                                        <button 
+                                        <button
                                             style={{ padding: '5px 10px', background: '#dc3545', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
                                             onClick={async () => { await magacinService.removeDobavljac(d.pib); loadData(); }}
                                         >
@@ -112,7 +125,7 @@ export const AdminWarehouse: React.FC = () => {
                 <section style={{ flex: 1, border: '1px solid #ddd', borderRadius: '8px', padding: '20px', background: '#fafafa' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
                         <h2 style={{ margin: 0, fontSize: '20px', color: '#444' }}>Sirova Zrna</h2>
-                        <button 
+                        <button
                             style={{ padding: '8px 16px', background: '#28a745', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}
                             onClick={() => { setEditData(null); setShowZrnoModal(true); }}
                         >
@@ -133,13 +146,13 @@ export const AdminWarehouse: React.FC = () => {
                                     <td style={{ padding: '12px 10px', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>{z.naziv}</td>
                                     <td style={{ padding: '12px 10px', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>{z.dobavljac.naziv}</td>
                                     <td style={{ padding: '12px 10px' }}>
-                                        <button 
+                                        <button
                                             style={{ marginRight: '8px', padding: '5px 10px', background: '#ffc107', border: 'none', borderRadius: '4px', cursor: 'pointer', color: '#000' }}
                                             onClick={() => { setEditData(z); setShowZrnoModal(true); }}
                                         >
                                             Izmeni
                                         </button>
-                                        <button 
+                                        <button
                                             style={{ padding: '5px 10px', background: '#dc3545', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
                                             onClick={async () => { await magacinService.removeZrno(z.id!); loadData(); }}
                                         >

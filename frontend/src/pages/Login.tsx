@@ -29,7 +29,8 @@ export const Login: React.FC = () => {
 
             // 4. Safely check the role string directly off the user object
             if (userEntity.uloga === 'ADMIN') {
-                window.location.href = '/admin';
+                window.location.href = '/admin/magacin';
+                console.log('Admin user logged in, redirecting to admin dashboard.');
             } else {
                 window.location.href = '/';
             }

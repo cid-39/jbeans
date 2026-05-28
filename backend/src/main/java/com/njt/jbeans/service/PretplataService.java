@@ -114,7 +114,9 @@ public class PretplataService {
                 noveStavkeDto.add(stavkaDto);
             }
             noviDto.setStavke(noveStavkeDto);
-
+            
+            noviDto.setAdresa(staraNarudzbina.getKlijent().getAdresa());
+            
             String emailKlijenta = staraNarudzbina.getKlijent().getEmail();
             Narudzbina novaNarudzbina = narudzbinaService.createNarudzbina(noviDto, emailKlijenta);
 

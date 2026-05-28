@@ -116,6 +116,7 @@ export const App: React.FC = () => {
 
 
       /* --- Dynamic Match Fallbacks --- */
+      /* --- Dynamic Match Fallbacks --- */
       default:
         // Matches: /proizvod/{id}
         if (currentPath.match(/^\/proizvod\//)) {
@@ -129,8 +130,14 @@ export const App: React.FC = () => {
             </ProtectedRoute>
           );
         }
-        // Main Storefront landing catalog
-        return <ProductPage />;
+
+        // Ako korisnik ima token, šaljemo ga na prodavnicu, a ako nema, na login
+        const proveraTokena = localStorage.getItem('token');
+        if (proveraTokena) {
+          return <ProductPage />;
+        }
+
+        return <Login />;
     }
   };
 
